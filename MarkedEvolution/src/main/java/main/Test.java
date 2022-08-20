@@ -32,7 +32,7 @@ public class Test {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 		Random rnd = new Random();
 		 
 		
