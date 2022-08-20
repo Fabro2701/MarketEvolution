@@ -31,7 +31,7 @@ public class Test {
 			properties.load(new FileInputStream(new File("resources/properties/default.properties")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); 
 		} 
 		Random rnd = new Random();
 		 
