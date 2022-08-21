@@ -2,6 +2,8 @@ package model;
 
 public class Constants {
 	
+	public static final int CROMOSOME_LENGTH = 100;
+	
 	//default values
 	public static final String DEFAULT_NUM_POPULATION_SIZE = "100";
 	public static final String DEFAULT_MUTATION_PROBABILITY = "0.1f";

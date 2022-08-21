@@ -3,11 +3,15 @@ package backtesting.data;
 public class CandleData {
 	protected float low,high,close,open;
 	
-	public CandleData(float low, float high, float close, float open) {
+	public CandleData(float open, float high, float low, float close) {
 		this.low = low;
 		this.high = high;
 		this.close = close;
 		this.open = open;
+	}
+	
+	public String toString() {
+		return open+" "+high+" "+low+" "+close;
 	}
 	public float getLow() {
 		return low;

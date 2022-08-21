@@ -22,10 +22,10 @@ public class RandomInitializerOperator extends Operator{
 	@Override
 	public Population execute(Population population) {
 		for(int i=0;i<num;i++) {
-			Chromosome chr = new Chromosome();
-			this.grammar.parse(chr);
+			Chromosome chr = new Chromosome(Constants.CROMOSOME_LENGTH);
+			chr.init(rnd);
 			
-			Genotype geno = new Genotype();
+			Genotype geno = new Genotype(chr);
 			Phenotype pheno = new Phenotype();
 			
 			population.add(new Individual(geno,pheno,this.grammar));

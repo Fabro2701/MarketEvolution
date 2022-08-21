@@ -1,12 +1,14 @@
-<CODE> -> <LINE>|<CODE> <LINE>.
-<LINE> -> <ACTION> ';'|<IF>.
-<IF> -> 'if' <COND> '{' <LINE> '}' 'else' '{' <LINE> '}' | 'if' <COND> '{' <LINE> '}'.
-<COND> -> '(' <OBS> ')' | '(' <OBS> <OP> <OBS> ')' | '(' '(' <AREXP> ')' <OP> '(' <AREXP> ')' ')'.
-<OBS> -> 'r_f_d'|'l_f_d'|'u_f_d'|'d_f_d'.
+<S> -> <IF>.
+<IF> -> 'if' <COND> '{' <TRADE> '}' 'else' '{' <TRADE> '}' | 'if' <COND> '{' <TRADE> '}'.
+<COND> -> '('<VALUE> <OP> <OBS> ')'| '('<COND><LOGOP><COND>')'.
+<VALUE> -> <INTCONST> | <REALCONST>.
+<OBS> -> 'ma'<MA>'['<DAY>']'|<PRICE>'['<DAY>']'.
+<PRICE> -> 'open'|'high'|'low'|'close'.
+<MA> -> '25'|'50'|'200'.
+<DAY> -> '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'.
 <OP> -> '<'|'>'|'<='|'>='.
 <AR> -> '+'|'*'|'-'.
-<ACTION> -> '"RIGHT"'|'"LEFT"'|'"UP"'|'"DOWN"'|'"NEUTRAL"'.
-<V> -> '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'.
-<AREXP> -> <OBS>|<V>|<AREXP> <AR> <AREXP>.
-<Pi> -> '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'.
+<INTCONST> -> <INTCONST><INTCONST>|'0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'.
+<REALCONST> -> '0.'<INTCONST>.
 <LOGOP> -> '||' | '&&'.
+<TRADE> -> 'return BUY;'|'return SELL;'|'return NOTHING;'.

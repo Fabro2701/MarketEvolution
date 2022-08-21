@@ -7,5 +7,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JSON-java-master"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jfreechart-1.5.3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

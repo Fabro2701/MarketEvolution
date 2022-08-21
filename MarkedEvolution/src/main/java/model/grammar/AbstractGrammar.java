@@ -313,6 +313,9 @@ public abstract class AbstractGrammar {
 	}
 	
 	public static void main(String args[]) {
+		AbstractGrammar g = new StandardGrammar();
+		g.parseBNF("default2");
+		System.out.println(g);
 //		AbstractGrammar g = new Grammar();
 //		g.parseBNF("test");
 //		g.calculateAttributes();

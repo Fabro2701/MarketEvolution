@@ -23,10 +23,13 @@ public class BasicSearchAlgorithm extends AbstractSearchAlgorithm{
 	}
 	@Override
 	public Population run(int its) {
+		long start = System.currentTimeMillis();
 		Population aux = init(new Population());
 		for(int i=0;i<its;i++) {
+			System.out.println("Starting Generation "+i);
 			aux = step(aux);
 		}
+		System.out.println("Simulation done in: "+(System.currentTimeMillis()-start));
 		return aux;
 	}
 

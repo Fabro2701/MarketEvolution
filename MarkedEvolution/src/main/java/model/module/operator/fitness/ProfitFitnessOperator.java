@@ -3,13 +3,18 @@ package model.module.operator.fitness;
 import java.util.Properties;
 import java.util.Random;
 
+import backtesting.BackTest;
+import backtesting.stats.BackTestStats;
 import model.individual.Individual;
 import model.individual.Population;
 
 public class ProfitFitnessOperator extends FitnessEvaluationOperator{
+	BackTest backtest;
 	public ProfitFitnessOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
-		// TODO Auto-generated constructor stub
+		backtest = new BackTest("EURUSD=X");
+		//backtest.loadData("EURUSD=X");
+	
 	}
 
 	@Override
@@ -19,7 +24,7 @@ public class ProfitFitnessOperator extends FitnessEvaluationOperator{
 
 	@Override
 	protected float evaluate(Individual ind) {
-		float fitness=0.f;
-		return fitness;
+		BackTestStats stats = backtest.runTest(ind.getPhenotype().getStrategy());
+		return stats.getProfit();
 	}
 }

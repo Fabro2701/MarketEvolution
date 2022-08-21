@@ -4,6 +4,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import model.Constants;
+import model.individual.Chromosome;
 import model.individual.Individual;
 import model.individual.Population;
 import model.module.operator.Operator;
@@ -23,8 +24,8 @@ public class BasicCodonFlipMutationOperator extends Operator{
 	public Population execute(Population population) {
 		for(Individual ind:population) {
 			if(this.probability < this.rnd.nextFloat()) {
-				ind.getGenotype();
-				//...
+				Chromosome c = ind.getGenotype().getChromosome();
+				c.getCodon(rnd.nextInt(c.getLength())).setInt(rnd.nextInt(256));
 			}
 		}
 		return population;

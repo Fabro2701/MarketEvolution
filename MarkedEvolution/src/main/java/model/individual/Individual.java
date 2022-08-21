@@ -19,9 +19,19 @@ public class Individual {
 		this.phenotype = pheno;
 		this.genotype = geno;
 		this.grammar = grammar;
+		this.phenotype.init(grammar.parse(genotype.getChromosome()));
+		
+
 		this.age = 0;
 		this.valid = pheno.isValid();
 		this.evaluated = false;
+	}
+	public Individual(Individual copy) {
+		this.phenotype = new Phenotype(copy.phenotype);
+		this.genotype = new Genotype(copy.genotype);
+		this.grammar = copy.grammar;
+		this.age = copy.age;
+		this.valid = copy.valid;
 	}
 	public Genotype getGenotype() {
 		return genotype;
