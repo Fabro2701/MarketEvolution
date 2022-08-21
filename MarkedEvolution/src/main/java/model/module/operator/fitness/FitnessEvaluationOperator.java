@@ -22,6 +22,7 @@ public abstract class FitnessEvaluationOperator extends Operator{
 	@Override
 	public Population execute(Population population) {
 		for(Individual ind:population) {
+			if(ind.isEvaluated())continue;
 			if(ind.isValid()) {
 				ind.setFitness(evaluate(ind));
 			}

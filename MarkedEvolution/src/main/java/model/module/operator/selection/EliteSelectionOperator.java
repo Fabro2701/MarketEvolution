@@ -28,7 +28,7 @@ public class EliteSelectionOperator extends Operator{
 		Population selected = new Population();
 		
 		population.sort(Comparator.comparing(Individual::getFitness));
-		for(int i=0;i<this.selectionSize;i++) {
+		for(int i=population.size()-1;i>=0;i--) {
 			selected.add(population.get(i));
 		}
 		return selected;

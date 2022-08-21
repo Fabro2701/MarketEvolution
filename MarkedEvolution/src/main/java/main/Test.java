@@ -14,7 +14,7 @@ import model.grammar.AbstractGrammar;
 import model.grammar.StandardGrammar;
 import model.module.Module;
 import model.module.operator.Operator;
-import model.module.operator.PrintOperator;
+import model.module.operator.collector.FintessCollectorOperator;
 import model.module.operator.crossover.OnePointCrossOverOperator;
 import model.module.operator.fitness.ProfitFitnessOperator;
 import model.module.operator.initialization.RandomInitializerOperator;
@@ -33,7 +33,7 @@ public class Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace(); 
 		} 
-		Random rnd = new Random();
+		Random rnd = new Random(7);
 		 
 		
 		AbstractSearchAlgorithm algo = new BasicSearchAlgorithm();
@@ -48,6 +48,10 @@ public class Test {
 		Module initFitnessModule = new Module();
 		Operator fitnessOp = new ProfitFitnessOperator(properties,rnd);
 		initFitnessModule.addOperator(fitnessOp);
+		
+		Module fitnesscollModule = new Module();
+		Operator fitnesscollOp = new FintessCollectorOperator(properties,rnd);
+		fitnesscollModule.addOperator(fitnesscollOp);
 
 		//loop
 		AbstractPipeline loopPipeline = new SimplePipeline();
@@ -71,16 +75,18 @@ public class Test {
 		
 		initPipeline.addModule(initModule);
 		initPipeline.addModule(initFitnessModule);
+		initPipeline.addModule(fitnesscollModule);
 
 		loopPipeline.addModule(selectionModule);
 		loopPipeline.addModule(crossoverModule);
 		loopPipeline.addModule(mutationModule);
 		loopPipeline.addModule(fitnessModule);
+		loopPipeline.addModule(fitnesscollModule);
 		
 		algo.setInitPipeline(initPipeline);
 		algo.setLoopPipeline(loopPipeline);
 		
-		algo.run(2);
+		algo.run(200);
 		
 	}
 }

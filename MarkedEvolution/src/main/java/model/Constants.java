@@ -6,8 +6,8 @@ public class Constants {
 	
 	//default values
 	public static final String DEFAULT_NUM_POPULATION_SIZE = "100";
-	public static final String DEFAULT_MUTATION_PROBABILITY = "0.1f";
-	public static final String DEFAULT_CROSSOVER_PROBABILITY = "0.1f";
+	public static final String DEFAULT_MUTATION_PROBABILITY = "0.01f";
+	public static final String DEFAULT_CROSSOVER_PROBABILITY = "0.9f";
 	public static final String DEFAULT_SELECTION_SIZE = "30";
 	public static final String DEFAULT_FITNESS_VALUE = "-1f";
 	

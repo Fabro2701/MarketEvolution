@@ -32,7 +32,7 @@ public class OnePointCrossOverOperator extends Operator{
 		for(int i=0;i<num-population.size();i++) {
 			p1 = rnd.nextInt(population.size());
 			p2 = rnd.nextInt(population.size());
-			if(this.probability < this.rnd.nextFloat()) {
+			if(this.probability > this.rnd.nextFloat()) {
 				Pair<Chromosome, Chromosome> chs = crossover(population.get(p1).getGenotype().getChromosome(),population.get(p2).getGenotype().getChromosome());
 				
 				children.add(new Individual(new Genotype(chs.first), new Phenotype(), population.get(p1).getGrammar()));

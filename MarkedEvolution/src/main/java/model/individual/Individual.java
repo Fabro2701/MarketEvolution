@@ -23,7 +23,7 @@ public class Individual {
 		
 
 		this.age = 0;
-		this.valid = pheno.isValid();
+		this.valid = this.phenotype.isValid();
 		this.evaluated = false;
 	}
 	public Individual(Individual copy) {
@@ -32,6 +32,12 @@ public class Individual {
 		this.grammar = copy.grammar;
 		this.age = copy.age;
 		this.valid = copy.valid;
+	}
+	public void revaluate() {
+		this.evaluated = false;
+		this.phenotype.init(grammar.parse(genotype.getChromosome()));
+		this.valid = this.phenotype.isValid();
+		
 	}
 	public Genotype getGenotype() {
 		return genotype;
@@ -75,4 +81,5 @@ public class Individual {
 	public void setValid(boolean valid) {
 		this.valid = valid;
 	}
+	
 }
