@@ -21,7 +21,7 @@ public class Individual {
 		this.grammar = grammar;
 		this.phenotype.init(grammar.parse(genotype.getChromosome()));
 		
-
+		
 		this.age = 0;
 		this.valid = this.phenotype.isValid();
 		this.evaluated = false;

@@ -19,7 +19,7 @@ import model.module.operator.crossover.OnePointCrossOverOperator;
 import model.module.operator.fitness.ProfitFitnessOperator;
 import model.module.operator.initialization.RandomInitializerOperator;
 import model.module.operator.mutation.BasicCodonFlipMutationOperator;
-import model.module.operator.selection.EliteSelectionOperator;
+import model.module.operator.selection.TournamentSelectionOperator;
 
 public class Test {
 	
@@ -57,7 +57,7 @@ public class Test {
 		AbstractPipeline loopPipeline = new SimplePipeline();
 		
 		Module selectionModule = new Module();
-		Operator selectionOp = new EliteSelectionOperator(properties,rnd);
+		Operator selectionOp = new TournamentSelectionOperator(properties,rnd);
 		selectionModule.addOperator(selectionOp);
 		
 		Module crossoverModule = new Module();

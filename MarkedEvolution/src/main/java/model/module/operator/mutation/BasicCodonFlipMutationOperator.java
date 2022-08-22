@@ -23,12 +23,19 @@ public class BasicCodonFlipMutationOperator extends Operator{
 	@Override
 	public Population execute(Population population) {
 		Chromosome c = null;
+		boolean b = false;
 		for(Individual ind:population) {
-			if(this.probability > this.rnd.nextFloat()) {
-				c = ind.getGenotype().getChromosome();
-				c.getCodon(rnd.nextInt(c.getLength())).setInt(rnd.nextInt(256));
-				ind.revaluate();
+			b = false;
+			c = ind.getGenotype().getChromosome();
+			for(int i=0;i<c.getLength();i++) {
+				if(this.probability > this.rnd.nextFloat()) {
+					c.getCodon(i).setInt(rnd.nextInt(256));
+					
+					b = true;
+				}
+				if(b)ind.revaluate();
 			}
+			
 		}
 		return population;
 	}
