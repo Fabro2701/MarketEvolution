@@ -11,11 +11,6 @@ public class PrintOperator extends Operator{
 		this.msg=s;
 	}
 	@Override
-	public Population execute(Population population) {
-		System.out.println(this.msg);
-		return population;
-	}
-	@Override
 	public void setProperties(Properties properties) {
 		// TODO Auto-generated method stub
 		
