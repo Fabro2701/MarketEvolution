@@ -11,7 +11,7 @@ import model.individual.Individual;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class TournamentSelectionOperator extends Operator{
+public class TournamentSelectionOperator extends SelectionOperator{
 	int selectionSize,k;
 	public TournamentSelectionOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
@@ -24,15 +24,13 @@ public class TournamentSelectionOperator extends Operator{
 		k = Integer.parseInt(properties.getProperty(Constants.TOURNAMENT_SIZE, Constants.DEFAULT_TOURNAMENT_SIZE));
 	}
 
+
 	@Override
-	public Population execute(Population population) {
-		Population selected = new Population();
-		
+	public void seletPopulation(Population population) {
 		population.sort(Comparator.comparing(Individual::getFitness));
 		for(int i=0;i<selectionSize;i++) {
-			selected.add(getWinner(population));
+			this.selectedPopulation.add(getWinner(population));
 		}
-		return selected;
 	}
 	private Individual getWinner(Population population) {
 		List<Individual>l = new ArrayList<Individual>();
@@ -42,6 +40,7 @@ public class TournamentSelectionOperator extends Operator{
 		l.sort(Comparator.comparing(Individual::getFitness));
 		return l.get(l.size()-1);
 	}
+
 	 
 
 }

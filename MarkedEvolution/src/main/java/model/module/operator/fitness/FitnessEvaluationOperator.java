@@ -17,24 +17,9 @@ public abstract class FitnessEvaluationOperator extends Operator{
 
 	@Override
 	public void setProperties(Properties properties) {
-		defaultFitness = Float.parseFloat(properties.getProperty(Constants.DEFAULT_FITNESS, Constants.DEFAULT_FITNESS_VALUE));
-	}
-	@Override
-	public Population execute(Population population) {
-		for(Individual ind:population) {
-			if(ind.isEvaluated())continue;
-			if(ind.isValid()) {
-				ind.setFitness(evaluate(ind));
-			}
-			else {
-				ind.setFitness(this.defaultFitness);
-			}
-			ind.setEvaluated(true);
-		}
-		return population;
 	}
 
-	protected abstract float evaluate(Individual ind);
+	public abstract float evaluate(Individual ind);
 
 	
 

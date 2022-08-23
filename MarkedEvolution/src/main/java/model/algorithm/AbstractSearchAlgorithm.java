@@ -5,9 +5,9 @@ import model.individual.Population;
 public abstract class AbstractSearchAlgorithm {
 	protected AbstractPipeline initPipeline,loopPipeline;
 	
-	public abstract Population init(Population population);
-	public abstract Population step(Population population);
-	public abstract Population run(int its);
+	public abstract void init();
+	public abstract void step();
+	public abstract void run(int its);
 	
 	public AbstractPipeline getInitPipeline() {
 		return initPipeline;

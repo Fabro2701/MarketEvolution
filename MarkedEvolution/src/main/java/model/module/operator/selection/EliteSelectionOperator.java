@@ -10,7 +10,7 @@ import model.individual.Individual;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class EliteSelectionOperator extends Operator{
+public class EliteSelectionOperator extends SelectionOperator{
 	int selectionSize;
 	public EliteSelectionOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
@@ -24,14 +24,11 @@ public class EliteSelectionOperator extends Operator{
 	}
 
 	@Override
-	public Population execute(Population population) {
-		Population selected = new Population();
-		
+	public void seletPopulation(Population population) {
 		population.sort(Comparator.comparing(Individual::getFitness));
 		for(int i=0;i<selectionSize;i++) {
-			selected.add(population.get(population.size()-1-i));
+			this.selectedPopulation.add(population.get(population.size()-1-i));
 		}
-		return selected;
 	}
 
 }

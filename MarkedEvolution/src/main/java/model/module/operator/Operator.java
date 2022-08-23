@@ -12,6 +12,6 @@ public abstract class Operator implements IProperties{
 		this.rnd = rnd;
 		this.setProperties(properties);
 	}
-	public abstract Population execute(Population population);
+	//public abstract Population execute(Population population);
 
 }

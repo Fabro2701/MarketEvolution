@@ -12,7 +12,7 @@ import model.individual.Phenotype;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class RandomInitializerOperator extends Operator{
+public class RandomInitializerOperator extends InitializationOperator{
 	AbstractGrammar grammar;
 	int num;
 	public RandomInitializerOperator(Properties properties, Random rnd, AbstractGrammar grammar) {
@@ -20,21 +20,19 @@ public class RandomInitializerOperator extends Operator{
 		this.grammar = grammar;
 	}
 	@Override
-	public Population execute(Population population) {
-		for(int i=0;i<num;i++) {
-			Chromosome chr = new Chromosome(Constants.CROMOSOME_LENGTH);
-			chr.init(rnd);
-			
-			Genotype geno = new Genotype(chr);
-			Phenotype pheno = new Phenotype();
-			
-			population.add(new Individual(geno,pheno,this.grammar));
-		}
-		return population;
+	public void setProperties(Properties properties) {
+		// TODO Auto-generated method stub
 	}
 	@Override
-	public void setProperties(Properties properties) {
-		num = Integer.parseInt(properties.getProperty(Constants.POPULATION_SIZE, Constants.DEFAULT_NUM_POPULATION_SIZE));
+	public Individual createIndividual() {
+		Chromosome chr = new Chromosome(Constants.CROMOSOME_LENGTH);
+		chr.init(rnd);
+		
+		Genotype geno = new Genotype(chr);
+		Phenotype pheno = new Phenotype();
+		
+		return new Individual(geno,pheno,this.grammar);
 	}
+	
 
 }

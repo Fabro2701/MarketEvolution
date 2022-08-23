@@ -23,7 +23,7 @@ public class ProfitFitnessOperator extends FitnessEvaluationOperator{
 	}
 
 	@Override
-	protected float evaluate(Individual ind) {
+	public float evaluate(Individual ind) {
 		BackTestStats stats = backtest.runTest(ind.getPhenotype().getStrategy());
 		return stats.getProfit();
 	}

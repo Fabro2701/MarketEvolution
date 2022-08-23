@@ -9,7 +9,7 @@ import model.individual.Individual;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class BasicCodonFlipMutationOperator extends Operator{
+public class BasicCodonFlipMutationOperator extends MutationOperator{
 	float probability;
 	public BasicCodonFlipMutationOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
@@ -21,23 +21,15 @@ public class BasicCodonFlipMutationOperator extends Operator{
 	}
 
 	@Override
-	public Population execute(Population population) {
-		Chromosome c = null;
+	public void mutateIndividual(Individual individual) {
 		boolean b = false;
-		for(Individual ind:population) {
-			b = false;
-			c = ind.getGenotype().getChromosome();
-			for(int i=0;i<c.getLength();i++) {
-				if(this.probability > this.rnd.nextFloat()) {
-					c.getCodon(i).setInt(rnd.nextInt(256));
-					
-					b = true;
-				}
-				if(b)ind.revaluate();
+		Chromosome c = individual.getGenotype().getChromosome();
+		for(int i=0;i<c.getLength();i++) {
+			if(this.probability > this.rnd.nextFloat()) {
+				c.getCodon(i).setInt(rnd.nextInt(256));
+				b = true;
 			}
-			
 		}
-		return population;
+		if(b)individual.revaluate();
 	}
-
 }

@@ -8,7 +8,7 @@ import model.individual.Individual;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class FintessCollectorOperator extends Operator{
+public class FintessCollectorOperator extends CollectorOperator{
 
 	public FintessCollectorOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
@@ -16,21 +16,19 @@ public class FintessCollectorOperator extends Operator{
 	}
 
 	@Override
+	public void collect() {
+		DoubleSummaryStatistics stats = this.objetivePopulation.stream().mapToDouble(Individual::getFitness).summaryStatistics();
+		Individual best = this.objetivePopulation.stream().max((e1,e2)->Float.compare(e1.getFitness(), e2.getFitness())).get();
+		System.out.println(best.getPhenotype().getVisualCode());
+		System.out.println("Best Individual: "+stats.getMax());
+		System.out.println("Avg Individual: "+stats.getAverage());		
+	}
+	@Override
 	public void setProperties(Properties properties) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public Population execute(Population population) {
-		DoubleSummaryStatistics stats = population.stream().mapToDouble(Individual::getFitness).summaryStatistics();
-		Individual best = population.stream().max((e1,e2)->Float.compare(e1.getFitness(), e2.getFitness())).get();
-		System.out.println(best.getPhenotype().getVisualCode());
-		System.out.println("Best Individual: "+stats.getMax());
-		System.out.println("Avg Individual: "+stats.getAverage());
-		
-		
-		return population;
-	}
+
 
 }

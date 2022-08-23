@@ -1,21 +1,27 @@
 package model.module;
 
-import java.util.ArrayList;
+import java.util.Properties;
+import java.util.Random;
 
+import model.IProperties;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class Module extends ArrayList<Operator>{
-
-	public Population execute(Population population) {
-		Population aux = population;
-		for(Operator o:this) {
-			aux = o.execute(aux);
-		}
-		return aux;
+public abstract class Module implements IProperties{
+	Population population;
+	Random rnd;
+	public Module(Population population, Properties properties, Random rnd) {
+		this.population = population;
+		this.setProperties(properties);
+		this.rnd = rnd;
 	}
-	public void addOperator(Operator op) {
-		this.add(op);
+	public abstract void execute();
+	public abstract void addOperator(Operator op);
+	public void setPopulation(Population population) {
+		this.population = population;
+	}
+	public Population getPopulation() {
+		return this.population;
 	}
 
 }

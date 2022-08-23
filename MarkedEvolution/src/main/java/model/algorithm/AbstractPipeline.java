@@ -6,11 +6,12 @@ import model.individual.Population;
 import model.module.Module;
 
 public abstract class AbstractPipeline extends ArrayList<Module>{
-	public abstract Population step(Population population);
+	
 	
 	public AbstractPipeline() {
 		super();
 	}
+	public abstract void step();
 	public void addModule(Module m) {
 		this.add(m);
 	}

@@ -6,12 +6,10 @@ import model.module.Module;
 public class SimplePipeline extends AbstractPipeline{
 
 	@Override
-	public Population step(Population population) {
-		Population aux = population;
+	public void step() {
 		for(Module m:this) {
-			aux = m.execute(aux);
+			m.execute();
 		}
-		return aux;
 	}
 
 }

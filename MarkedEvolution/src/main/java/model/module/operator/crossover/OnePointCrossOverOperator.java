@@ -12,41 +12,17 @@ import model.individual.Phenotype;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class OnePointCrossOverOperator extends Operator{
-	float probability;
-	int num;
+public class OnePointCrossOverOperator extends CrossoverOperator{
 	public OnePointCrossOverOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
 	}
 
 	@Override
 	public void setProperties(Properties properties) {
-		probability = Float.parseFloat(properties.getProperty(Constants.CROSSOVER_PROBABILITY, Constants.DEFAULT_CROSSOVER_PROBABILITY));
-		num = Integer.parseInt(properties.getProperty(Constants.POPULATION_SIZE, Constants.DEFAULT_NUM_POPULATION_SIZE));
+		super.setProperties(properties);
 	}
 
-	@Override
-	public Population execute(Population population) {
-		Population children = new Population();
-		int p1,p2;
-		for(int i=0;i<num-population.size();i++) {
-			p1 = rnd.nextInt(population.size());
-			p2 = rnd.nextInt(population.size());
-			if(this.probability > this.rnd.nextFloat()) {
-				Pair<Chromosome, Chromosome> chs = crossover(population.get(p1).getGenotype().getChromosome(),population.get(p2).getGenotype().getChromosome());
-				
-				children.add(new Individual(new Genotype(chs.first), new Phenotype(), population.get(p1).getGrammar()));
-				children.add(new Individual(new Genotype(chs.second), new Phenotype(), population.get(p2).getGrammar()));
-			}
-			else {
-				children.add(new Individual(population.get(p1)));
-				children.add(new Individual(population.get(p2)));
-			}
-		}
-		population.addAll(children);
-		
-		return population;
-	}
+	
 	public Pair<Chromosome, Chromosome> crossover(Chromosome c1, Chromosome c2) {
 		
 		int crossPoint = rnd.nextInt(c1.getLength());
@@ -57,9 +33,19 @@ public class OnePointCrossOverOperator extends Operator{
 			child1.setIntToCodon(i, c2.getCodon(i).getIntValue());
 			child2.setIntToCodon(i, c1.getCodon(i).getIntValue());
 		}
-		
-	
 		return new Pair<Chromosome, Chromosome>(child1,child2);
+	}
+
+	@Override
+	public void cross(Pair<Individual, Individual> parents) {
+		if(this.probability > this.rnd.nextFloat()) {
+			Pair<Chromosome, Chromosome> ncs = crossover(parents.first.getGenotype().getChromosome(),parents.second.getGenotype().getChromosome());
+			parents.first.setGenotype(new Genotype(ncs.first));
+			parents.first.revaluate();
+			parents.second.setGenotype(new Genotype(ncs.second));
+			parents.second.revaluate();
+		}
+		
 	}
 
 }
