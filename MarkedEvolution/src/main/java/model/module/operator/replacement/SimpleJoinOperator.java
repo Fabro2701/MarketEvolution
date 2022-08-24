@@ -1,5 +1,6 @@
 package model.module.operator.replacement;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Properties;
 import java.util.Random;
@@ -31,7 +32,7 @@ public class SimpleJoinOperator extends JoinOperator{
 			trimpopulation(generalPopulation,generalPopulation.size()+outsiders.size()-num);
 		}
 		//System.out.println("ideal num "+num);
-		System.out.println("joining "+outsiders.size()+" to "+generalPopulation.size());
+		//System.out.println("joining "+outsiders.size()+" to "+generalPopulation.size());
 		this.generalPopulation.addAll(outsiders);
 		
 	}
@@ -39,7 +40,7 @@ public class SimpleJoinOperator extends JoinOperator{
 	private void trimpopulation(Population population, int size) {
 		if(size<1)return;
 		//System.out.println("removing: "+size);
-		population.sort(Comparator.comparing(Individual::getFitness));
+		Collections.sort(population, Collections.reverseOrder());
 		for(int i=0;i<size;i++) {
 			population.remove(population.size()-1);
 		}

@@ -23,7 +23,7 @@ public class CrossoverModule extends Module{
 	@Override
 	public void execute() {
 		Pair<Individual,Individual>parents = new Pair<Individual,Individual>(null,null);
-		for(int i=0;i<num;i++) {
+		for(int i=0;i<population.size();i++) {
 			parents.first = this.population.get(rnd.nextInt(this.population.size()));
 			parents.second = this.population.get(rnd.nextInt(this.population.size()));
 			this.operator.cross(parents);

@@ -53,12 +53,15 @@ public class Parser {
 	
 	private JSONObject ReturnStatement() {
 		_eat("return");
-		String r = null;
+		Object r = null;
 		if(this._lookahead.getString("type").equals("IDENTIFIER")) {
 			r = this.Identifier().getString("name");
 		}
+//		else (this._lookahead.getString("type").equals("IDENTIFIER")) {
+//			r = this.NumberLiteral().getString("value");
+//		}
 		else {
-			r = this.NumberLiteral().getString("value");
+			r = this.Expression();
 		}
 		_eat(";");
 		return new JSONObject().put("type", "ReturnStatement")
@@ -347,6 +350,8 @@ public class Parser {
 	private JSONObject PrimaryExpression() {
 		if(_isLiteral(this._lookahead.getString("type")))return this.Literal();
 		switch(this._lookahead.getString("type")) {
+			case "FUNCTION_CALL":
+				return this.FunctionExpression();
 			case "(":
 				return this.ParenthesizedExpression();
 			case "IDENTIFIER":
@@ -354,6 +359,20 @@ public class Parser {
 			default:
 				return this.LeftHandSideExpression();
 		}
+	}
+	private JSONObject FunctionExpression() {
+		JSONArray arr = new JSONArray();
+		String name = this._eat("FUNCTION_CALL").getString("value");
+		name = name.substring(0, name.length()-1);
+		
+		while(this._lookahead != null && !this._lookahead.getString("type").equals(")")) {
+			arr.put(this.Expression());
+			if(this._lookahead.getString("type").equals(","))this._eat(",");
+		}
+		this._eat(")");
+		return new JSONObject().put("type", "FunctionCall")
+							   .put("name", name)
+							   .put("parameters", arr);
 	}
 	private boolean _isLiteral(String s) {
 		return s.equals("NUMBER")||s.equals("STRING")||s.equals("true")||s.equals("false")||s.equals("null");
@@ -444,7 +463,7 @@ public class Parser {
 				+ "       neutral=true;\n"
 				+ "   }\n"
 				+ "}";
-		String e2 = "if(2.1>4){return hola;return 3.3;}";
+		String e2 = "max(3,4+5,6*8);";
 		Parser parser = new Parser();
 		System.out.println(parser.parse(e2).toString(4));
 		

@@ -12,7 +12,7 @@ import model.individual.Population;
 import model.module.operator.Operator;
 
 public class TournamentSelectionOperator extends SelectionOperator{
-	int selectionSize,k;
+	int k;
 	public TournamentSelectionOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
 		// TODO Auto-generated constructor stub
@@ -20,7 +20,7 @@ public class TournamentSelectionOperator extends SelectionOperator{
 
 	@Override
 	public void setProperties(Properties properties) {
-		selectionSize = Integer.parseInt(properties.getProperty(Constants.SELECTION_SIZE, Constants.DEFAULT_SELECTION_SIZE));
+		super.setProperties(properties);
 		k = Integer.parseInt(properties.getProperty(Constants.TOURNAMENT_SIZE, Constants.DEFAULT_TOURNAMENT_SIZE));
 	}
 
@@ -29,7 +29,7 @@ public class TournamentSelectionOperator extends SelectionOperator{
 	public void seletPopulation(Population population) {
 		population.sort(Comparator.comparing(Individual::getFitness));
 		for(int i=0;i<selectionSize;i++) {
-			this.selectedPopulation.add(getWinner(population));
+			this.selectedPopulation.add(new Individual(getWinner(population)));
 		}
 	}
 	private Individual getWinner(Population population) {

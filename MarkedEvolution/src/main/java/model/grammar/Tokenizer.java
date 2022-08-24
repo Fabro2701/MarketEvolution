@@ -12,6 +12,7 @@ public class Tokenizer {
 	//Regular Expressions for each token type
 	String [][]Spec = {{"^\\s+",null},
 			   		   {"^;",";"},
+			   		   {"^,",","},
 			   		   {"^[{]","{"},
 			   		   {"^[}]","}"},
 			   		   {"^[(]","("},
@@ -20,6 +21,7 @@ public class Tokenizer {
 			   		   {"^\\breturn\\b","return"},
 			   		   {"^\\blet\\b","let"},
 			   		   {"^\\bif\\b","if"},
+			   		   {"^[\\w\\d]+[(]","FUNCTION_CALL"},
 			   		   {"^\\belse\\b","else"},
 			   		   {"^\\btrue\\b","true"},
 			   		   {"^\\bfalse\\b","false"},

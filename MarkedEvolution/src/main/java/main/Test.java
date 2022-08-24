@@ -39,7 +39,7 @@ public class Test {
 	
 	public static void main(String args[]) {
 		AbstractGrammar grammar = new StandardGrammar();
-		grammar.parseBNF("default");
+		grammar.parseBNF("default2");
 		Properties properties = new Properties();
 		try { 
 			properties.load(new FileInputStream(new File("resources/properties/default.properties")));
@@ -76,31 +76,31 @@ public class Test {
 		SelectionOperator selectionOp = new TournamentSelectionOperator(properties, rnd);
 		selectionModule.addOperator(selectionOp);
 		
-		CrossoverModule crossoverModule = new CrossoverModule(generalPopulation, properties, rnd);
+		CrossoverModule crossoverModule = new CrossoverModule(selectedPopulation, properties, rnd);
 		CrossoverOperator crossoverOp = new OnePointCrossOverOperator(properties,rnd);
 		crossoverModule.addOperator(crossoverOp);
 		
-		MutationModule mutationModule = new MutationModule(generalPopulation, properties, rnd);
+		MutationModule mutationModule = new MutationModule(selectedPopulation, properties, rnd);
 		MutationOperator mutationOp = new BasicCodonFlipMutationOperator(properties,rnd);
 		mutationModule.addOperator(mutationOp);
 		
-		FitnessModule fitnessModule = new FitnessModule(generalPopulation, properties,rnd);
+		FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties,rnd);
 		fitnessModule.addOperator(fitnessOp);
 		
 		JoinModule joinModule = new JoinModule(generalPopulation, properties, rnd, selectedPopulation);
 		JoinOperator joinOp = new SimpleJoinOperator(properties,rnd);
 		joinModule.addOperator(joinOp);
 		
-		initModule.setPopulation(generalPopulation);
-		initFitnessModule.setPopulation(generalPopulation);
-		
-		selectionModule.setPopulation(generalPopulation);
-		crossoverModule.setPopulation(generalPopulation);
-		mutationModule.setPopulation(generalPopulation);
-		fitnessModule.setPopulation(generalPopulation);
-		joinModule.setPopulation(generalPopulation);
-		
-		fitnesscollModule.setPopulation(generalPopulation);
+//		initModule.setPopulation(generalPopulation);
+//		initFitnessModule.setPopulation(generalPopulation);
+//		
+//		selectionModule.setPopulation(generalPopulation);
+//		crossoverModule.setPopulation(selectedPopulation);
+//		mutationModule.setPopulation(selectedPopulation);
+//		fitnessModule.setPopulation(selectedPopulation);
+//		joinModule.setPopulation(generalPopulation);
+//		
+//		fitnesscollModule.setPopulation(generalPopulation);
 		
 		initPipeline.addModule(initModule);
 		initPipeline.addModule(initFitnessModule);
@@ -110,8 +110,8 @@ public class Test {
 		loopPipeline.addModule(crossoverModule);
 		loopPipeline.addModule(mutationModule);
 		loopPipeline.addModule(fitnessModule);
-		loopPipeline.addModule(fitnesscollModule);
 		loopPipeline.addModule(joinModule);
+		loopPipeline.addModule(fitnesscollModule);
 		
 		algo.setInitPipeline(initPipeline);
 		algo.setLoopPipeline(loopPipeline);

@@ -2,7 +2,7 @@ package model.individual;
 
 import model.grammar.AbstractGrammar;
 
-public class Individual {
+public class Individual implements Comparable<Individual>{
 	
 	protected Genotype genotype;
 	protected Phenotype phenotype;
@@ -32,6 +32,8 @@ public class Individual {
 		this.grammar = copy.grammar;
 		this.age = copy.age;
 		this.valid = copy.valid;
+		this.fitness = copy.fitness;
+		this.evaluated = copy.evaluated;
 	}
 	public void revaluate() {
 		this.evaluated = false;
@@ -80,6 +82,18 @@ public class Individual {
 	}
 	public void setValid(boolean valid) {
 		this.valid = valid;
+	}
+	@Override
+	public int compareTo(Individual o) {
+
+        if(this.fitness < o.fitness) {
+            return -1;
+        }
+        if(this.fitness > o.fitness) {
+            return 1;
+        } else {
+            return 0;
+        }
 	}
 	
 }

@@ -57,8 +57,13 @@ public class Evaluator {
 	private String _evaluate(JSONObject query) {
 		String type = query.getString("type");
 		
+		if(type.contains("FunctionCall")) {
+			return _functionEvaluation(query.getString("name"),query.getJSONArray("parameters"));
+		}
+		
 		if(type.contains("ReturnStatement")) {
-			return query.getString("result");
+			return _evaluate(query.getJSONObject("result"));
+			//return query.getString("result");
 		}
 		
 		if(type.contains("Literal")) {
@@ -130,6 +135,31 @@ public class Evaluator {
 	}
 	
 	
+	private String _functionEvaluation(String string, JSONArray arguments) {
+		Float r = Float.parseFloat(this._evaluate(arguments.getJSONObject(0)));
+		if(string.equals("max")) {
+			for(int i=1;i<arguments.length();i++) {
+				r = Math.max(Float.parseFloat(this._evaluate(arguments.getJSONObject(i))), r);
+			}
+		}
+		else {
+			for(int i=1;i<arguments.length();i++) {
+				r = Math.min(Float.parseFloat(this._evaluate(arguments.getJSONObject(i))), r);
+			}
+		}
+		return r.toString();
+	}
+	private Float max(Float... arr) {
+		Float r = arr[0];
+		for(Float e:arr) r = Math.max(r, e);
+		return r;
+	}
+	private Float min(Float... arr) {
+		Float r = arr[0];
+		for(Float e:arr) r = Math.min(r, e);
+		return r;
+	}
+
 	/**
 	 * Evaluates if statement 
 	 * @param test
@@ -166,19 +196,19 @@ public class Evaluator {
 				result = _BooleanValueOf(_evaluate(left)) && _BooleanValueOf(_evaluate(right));
 				break;
 			case "<":
-				result = Float.valueOf(_evaluate(left)) < Float.valueOf(_evaluate(right));
+				result = Float.valueOf(_evaluate(left)).floatValue() < Float.valueOf(_evaluate(right)).floatValue();
 				break;
 			case "<=":
-				result = Float.valueOf(_evaluate(left)) <= Float.valueOf(_evaluate(right));
+				result = Float.valueOf(_evaluate(left)).floatValue() <= Float.valueOf(_evaluate(right)).floatValue();
 				break;
 			case ">":
-				result = Float.valueOf(_evaluate(left)) > Float.valueOf(_evaluate(right));
+				result = Float.valueOf(_evaluate(left)).floatValue() > Float.valueOf(_evaluate(right)).floatValue();
 				break;
 			case ">=":
-				result = Float.valueOf(_evaluate(left)) >= Float.valueOf(_evaluate(right));
+				result = Float.valueOf(_evaluate(left)).floatValue() >= Float.valueOf(_evaluate(right)).floatValue();
 				break;
 			case "==":
-				result = Float.valueOf(_evaluate(left)) == Float.valueOf(_evaluate(right));
+				result = Float.valueOf(_evaluate(left)).floatValue() == Float.valueOf(_evaluate(right)).floatValue();
 				break;
 		}
 		return result.toString();
@@ -245,11 +275,11 @@ public class Evaluator {
 		this._variables.putAll(obs);
 	}
 	public static void main(String args[]) {
-		String test1 = "if(ma25[7] >= 4 && y){\n"
-					 + "	return 0.5;\n"
+		String test1 = "if(min(3,4,5)==max(min(3,8),10)){\n"
+					 + "	return 0.5+1;\n"
 					 + "}"
 					 + "else{"
-					 + "return SELL;"
+					 + "return 0;"
 					 + "}";
 		Parser parser = new Parser();
 		JSONObject program = parser.parse(test1);
