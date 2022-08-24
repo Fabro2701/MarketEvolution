@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import backtesting.data.DataSeries;
+import backtesting.order.FixedTimeOrder;
 import backtesting.order.Order;
 import backtesting.order.Order.OrderType;
 import backtesting.order.OrdersManager;
@@ -24,12 +25,8 @@ public class Strategy {
 		this.evaluator.addObservations(obs);
 		
 		OrderType next = this.evaluator.getNext();
-		if(next == OrderType.BUY) {
-			ordersManager.addOrder(new Order(cont,1.f,data.getOpen(i),OrderType.BUY));
-			cont++;
-		}
-		else if(next == OrderType.SELL) {
-			ordersManager.addOrder(new Order(cont,1.f,data.getOpen(i),OrderType.SELL));
+		if(next == OrderType.BUY || next == OrderType.SELL) {
+			ordersManager.addOrder(new FixedTimeOrder(cont,1.f,data.getOpen(i),next, 10));
 			cont++;
 		}
 		else {

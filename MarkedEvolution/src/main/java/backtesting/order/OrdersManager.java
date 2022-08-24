@@ -14,7 +14,14 @@ public class OrdersManager {
 		closedOrders = new ArrayList<Order>();
 	}
 	public void update(CandleData newCandle) {
-		//there are no tps or sts
+		boolean delete = false;
+		for(int i=0;i<openOrders.size();i++) {
+			delete = openOrders.get(i).update(newCandle);
+			if(delete) {
+				openOrders.remove(i);
+				i--;
+			}
+		}
 	}
 	public void close(CandleData candle) {
 		float lastPrice = candle.getClose();

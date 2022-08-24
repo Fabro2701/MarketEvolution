@@ -1,5 +1,7 @@
 package backtesting.order;
 
+import backtesting.data.CandleData;
+
 public class Order {
 	protected int id;
 	protected float positionSize,openPrice,closePrice;
@@ -15,6 +17,18 @@ public class Order {
 		this.type = type;
 	}
 	public static enum OrderType{BUY,SELL,NOTHING}
+	public void close() {
+		if(type == OrderType.BUY) {
+			this.result = this.closePrice-this.openPrice;
+		}
+		else if(type == OrderType.SELL){
+			this.result = this.openPrice-this.closePrice;
+		}
+	}
+	public boolean update(CandleData newCandle) {
+		return false;
+		
+	}
 	public int getId() {
 		return id;
 	}
@@ -56,14 +70,6 @@ public class Order {
 	}
 	public void setResult(float result) {
 		this.result = result;
-	}
-	public void close() {
-		if(type == OrderType.BUY) {
-			this.result = this.closePrice-this.openPrice;
-		}
-		else if(type == OrderType.SELL){
-			this.result = this.openPrice-this.closePrice;
-		}
 	}
 
 }
