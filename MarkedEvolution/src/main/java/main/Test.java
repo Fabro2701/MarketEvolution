@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
+import model.Experiment;
 import model.algorithm.AbstractPipeline;
 import model.algorithm.AbstractSearchAlgorithm;
 import model.algorithm.BasicSearchAlgorithm;
@@ -21,23 +22,71 @@ import model.module.JoinModule;
 import model.module.MutationModule;
 import model.module.SelectionModule;
 import model.module.operator.Operator;
-import model.module.operator.collector.FintessCollectorOperator;
+import model.module.operator.collector.FitnessCollectorOperator;
 import model.module.operator.crossover.CrossoverOperator;
-import model.module.operator.crossover.OnePointCrossOverOperator;
+import model.module.operator.crossover.OnePointCrossoverOperator;
 import model.module.operator.fitness.FitnessEvaluationOperator;
 import model.module.operator.fitness.ProfitFitnessOperator;
 import model.module.operator.initialization.InitializationOperator;
 import model.module.operator.initialization.RandomInitializerOperator;
+import model.module.operator.join.JoinOperator;
+import model.module.operator.join.SimpleJoinOperator;
 import model.module.operator.mutation.BasicCodonFlipMutationOperator;
 import model.module.operator.mutation.MutationOperator;
-import model.module.operator.replacement.JoinOperator;
-import model.module.operator.replacement.SimpleJoinOperator;
 import model.module.operator.selection.SelectionOperator;
 import model.module.operator.selection.TournamentSelectionOperator;
 
-public class Test {
-	
+public class Test extends Experiment{
+	@Override
+	public void setup(Properties properties) {
+		AbstractPipeline initPipeline = new SimplePipeline();
+		
+		AbstractGrammar grammar = this.loadGrammar(properties);
+		InitializationModule initModule = this.loadInitializer(properties, grammar);
+		
+		FitnessModule initFitnessModule = this.loadFitness(properties);
+		
+		CollectorModule fitnesscollModule = this.loadCollector(properties);
+
+		//loop
+		AbstractPipeline loopPipeline = new SimplePipeline();
+		
+		SelectionModule selectionModule = this.loadSelection(properties);
+		
+		CrossoverModule crossoverModule = this.loadCrossover(properties);
+		
+		MutationModule mutationModule = this.loadMutation(properties);
+		
+		FitnessModule fitnessModule = this.loadFitness(properties);
+		
+		JoinModule joinModule = this.loadJoin(properties);
+
+		
+		initPipeline.addModule(initModule);
+		initPipeline.addModule(initFitnessModule);
+		initPipeline.addModule(fitnesscollModule);
+
+		loopPipeline.addModule(selectionModule);
+		loopPipeline.addModule(crossoverModule);
+		loopPipeline.addModule(mutationModule);
+		loopPipeline.addModule(fitnessModule);
+		loopPipeline.addModule(joinModule);
+		loopPipeline.addModule(fitnesscollModule);
+		
+		this.algorithm.setInitPipeline(initPipeline);
+		this.algorithm.setLoopPipeline(loopPipeline);
+	}
 	public static void main(String args[]) {
+		Properties properties = new Properties();
+		try { 
+			properties.load(new FileInputStream(new File("resources/properties/default.properties")));
+		} catch (IOException e) {e.printStackTrace(); } 
+		
+		Test test = new Test();
+		test.setup(properties);
+		test.run(properties);
+	}
+	public static void main2(String args[]) {
 		AbstractGrammar grammar = new StandardGrammar();
 		grammar.parseBNF("default2");
 		Properties properties = new Properties();
@@ -66,7 +115,7 @@ public class Test {
 		initFitnessModule.addOperator(fitnessOp);
 		
 		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
-		Operator fitnesscollOp = new FintessCollectorOperator(properties,rnd);
+		Operator fitnesscollOp = new FitnessCollectorOperator(properties,rnd);
 		fitnesscollModule.addOperator(fitnesscollOp);
 
 		//loop
@@ -77,7 +126,7 @@ public class Test {
 		selectionModule.addOperator(selectionOp);
 		
 		CrossoverModule crossoverModule = new CrossoverModule(selectedPopulation, properties, rnd);
-		CrossoverOperator crossoverOp = new OnePointCrossOverOperator(properties,rnd);
+		CrossoverOperator crossoverOp = new OnePointCrossoverOperator(properties,rnd);
 		crossoverModule.addOperator(crossoverOp);
 		
 		MutationModule mutationModule = new MutationModule(selectedPopulation, properties, rnd);

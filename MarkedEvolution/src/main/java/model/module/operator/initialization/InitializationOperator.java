@@ -3,12 +3,15 @@ package model.module.operator.initialization;
 import java.util.Properties;
 import java.util.Random;
 
+import model.grammar.AbstractGrammar;
 import model.individual.Individual;
 import model.module.operator.Operator;
 
 public abstract class InitializationOperator extends Operator{
-	public InitializationOperator(Properties properties, Random rnd) {
+	AbstractGrammar grammar;
+	public InitializationOperator(Properties properties, Random rnd, AbstractGrammar grammar) {
 		super(properties, rnd);
+		this.grammar = grammar;
 	}
 	
 	public abstract Individual createIndividual();

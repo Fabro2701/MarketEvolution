@@ -1,11 +1,145 @@
 package model;
 
-import model.algorithm.AbstractSearchAlgorithm;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Properties;
+import java.util.Random;
 
-public class Experiment {
-	AbstractSearchAlgorithm algorithm;
-	public Experiment(String filename) {
-		
-	}
+import model.algorithm.AbstractSearchAlgorithm;
+import model.algorithm.BasicSearchAlgorithm;
+import model.grammar.AbstractGrammar;
+import model.individual.Population;
+import model.module.CollectorModule;
+import model.module.CrossoverModule;
+import model.module.FitnessModule;
+import model.module.InitializationModule;
+import model.module.JoinModule;
+import model.module.MutationModule;
+import model.module.SelectionModule;
+import model.module.operator.collector.CollectorOperator;
+import model.module.operator.crossover.CrossoverOperator;
+import model.module.operator.fitness.FitnessEvaluationOperator;
+import model.module.operator.initialization.InitializationOperator;
+import model.module.operator.join.JoinOperator;
+import model.module.operator.mutation.MutationOperator;
+import model.module.operator.selection.SelectionOperator;
+
+public abstract class Experiment {
+	protected AbstractSearchAlgorithm algorithm;
+	Population generalPopulation;
+	Population selectedlPopulation;
+	Random rnd;
 	
+	public Experiment() {
+		algorithm = new BasicSearchAlgorithm();
+		generalPopulation = new Population();
+		selectedlPopulation = new Population();
+		rnd = new Random();
+	}
+	public abstract void setup(Properties properties);
+	public void run(Properties properties) {
+		this.algorithm.run(Integer.parseInt(properties.getProperty(Constants.ITERATIONS, Constants.DEFAULT_ITERATIONS)));
+	}
+	protected AbstractGrammar loadGrammar(Properties properties) {
+		AbstractGrammar grammar = null;
+		try {
+			grammar = (AbstractGrammar)Class.forName(properties.getProperty(Constants.GRAMMAR, Constants.DEFAULT_GRAMMAR)).getConstructors()[0].newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		grammar.parseBNF(properties.getProperty(Constants.GRAMMAR_FILE,Constants.DEFAULT_GRAMMAR_FILE));
+		return grammar;
+	}
+	protected InitializationModule loadInitializer(Properties properties, AbstractGrammar grammar) {
+		InitializationModule module = new InitializationModule(this.generalPopulation, properties, rnd);
+		InitializationOperator op = null;
+		try {
+			op = (InitializationOperator)Class.forName(properties.getProperty(Constants.INITIALIZER_CLASS, Constants.DEFAULT_INITIALIZER_CLASS)).getConstructor(Properties.class,Random.class,AbstractGrammar.class).newInstance(properties,rnd,grammar);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException | ClassNotFoundException | NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		module.addOperator(op);
+		return module;
+	}
+	protected CrossoverModule loadCrossover(Properties properties) {
+		CrossoverModule module = new CrossoverModule(this.generalPopulation, properties, rnd);
+		CrossoverOperator op = null;
+		try {
+			op = (CrossoverOperator)Class.forName(properties.getProperty(Constants.CROSSOVER_CLASS, Constants.DEFAULT_CROSSOVER_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException | ClassNotFoundException | NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		module.addOperator(op);
+		return module;
+	}
+	protected MutationModule loadMutation(Properties properties) {
+		MutationModule module = new MutationModule(this.generalPopulation, properties, rnd);
+		MutationOperator op = null;
+		try {
+			op = (MutationOperator)Class.forName(properties.getProperty(Constants.MUTATION_CLASS, Constants.DEFAULT_MUTATION_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException | ClassNotFoundException | NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		module.addOperator(op);
+		return module;
+	}
+	protected FitnessModule loadFitness(Properties properties) {
+		FitnessModule module = new FitnessModule(this.generalPopulation, properties, rnd);
+		FitnessEvaluationOperator op = null;
+		try {
+			op = (FitnessEvaluationOperator)Class.forName(properties.getProperty(Constants.FITNESS_CLASS, Constants.DEFAULT_FITNESS_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException | ClassNotFoundException | NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		module.addOperator(op);
+		return module;
+	}
+	protected JoinModule loadJoin(Properties properties) {
+		JoinModule module = new JoinModule(this.generalPopulation, properties, rnd, this.selectedlPopulation);
+		JoinOperator op = null;
+		try {
+			op = (JoinOperator)Class.forName(properties.getProperty(Constants.JOIN_CLASS, Constants.DEFAULT_JOIN_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException | ClassNotFoundException | NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		module.addOperator(op);
+		return module;
+	}
+	protected SelectionModule loadSelection(Properties properties) {
+		SelectionModule module = new SelectionModule(this.generalPopulation, properties, rnd, this.selectedlPopulation);
+		SelectionOperator op = null;
+		try {
+			op = (SelectionOperator)Class.forName(properties.getProperty(Constants.SELECTION_CLASS, Constants.DEFAULT_SELECTION_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException | ClassNotFoundException | NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		module.addOperator(op);
+		return module;
+	}
+	protected CollectorModule loadCollector(Properties properties) {
+		CollectorModule module = new CollectorModule(this.generalPopulation, properties, rnd);
+		CollectorOperator op = null;
+		try {
+			op = (CollectorOperator)Class.forName(properties.getProperty(Constants.COLLECTOR_CLASS, Constants.DEFAULT_COLLECTOR_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException | ClassNotFoundException | NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		module.addOperator(op);
+		return module;
+	}
 }

@@ -6,7 +6,7 @@ import java.util.Random;
 import model.individual.Population;
 import model.module.operator.Operator;
 import model.module.operator.collector.CollectorOperator;
-import model.module.operator.replacement.JoinOperator;
+import model.module.operator.join.JoinOperator;
 
 public class CollectorModule extends Module{
 	CollectorOperator operator;

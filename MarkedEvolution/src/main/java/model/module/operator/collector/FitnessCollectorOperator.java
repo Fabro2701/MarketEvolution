@@ -8,9 +8,9 @@ import model.individual.Individual;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class FintessCollectorOperator extends CollectorOperator{
+public class FitnessCollectorOperator extends CollectorOperator{
 
-	public FintessCollectorOperator(Properties properties, Random rnd) {
+	public FitnessCollectorOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
 		// TODO Auto-generated constructor stub
 	}

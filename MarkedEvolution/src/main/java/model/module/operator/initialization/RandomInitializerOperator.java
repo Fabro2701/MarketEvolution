@@ -13,11 +13,9 @@ import model.individual.Population;
 import model.module.operator.Operator;
 
 public class RandomInitializerOperator extends InitializationOperator{
-	AbstractGrammar grammar;
 	int num;
 	public RandomInitializerOperator(Properties properties, Random rnd, AbstractGrammar grammar) {
-		super(properties, rnd);
-		this.grammar = grammar;
+		super(properties, rnd, grammar);
 	}
 	@Override
 	public void setProperties(Properties properties) {

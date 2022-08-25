@@ -12,8 +12,8 @@ import model.individual.Phenotype;
 import model.individual.Population;
 import model.module.operator.Operator;
 
-public class OnePointCrossOverOperator extends CrossoverOperator{
-	public OnePointCrossOverOperator(Properties properties, Random rnd) {
+public class OnePointCrossoverOperator extends CrossoverOperator{
+	public OnePointCrossoverOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
 	}
 
