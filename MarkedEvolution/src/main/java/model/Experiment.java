@@ -25,14 +25,14 @@ import model.module.operator.selection.SelectionOperator;
 
 public abstract class Experiment {
 	protected AbstractSearchAlgorithm algorithm;
-	Population generalPopulation;
-	Population selectedlPopulation;
-	Random rnd;
+	protected Population generalPopulation;
+	protected Population selectedPopulation;
+	protected Random rnd;
 	
 	public Experiment() {
 		algorithm = new BasicSearchAlgorithm();
 		generalPopulation = new Population();
-		selectedlPopulation = new Population();
+		selectedPopulation = new Population();
 		rnd = new Random();
 	}
 	public abstract void setup(Properties properties);
@@ -51,8 +51,7 @@ public abstract class Experiment {
 		grammar.parseBNF(properties.getProperty(Constants.GRAMMAR_FILE,Constants.DEFAULT_GRAMMAR_FILE));
 		return grammar;
 	}
-	protected InitializationModule loadInitializer(Properties properties, AbstractGrammar grammar) {
-		InitializationModule module = new InitializationModule(this.generalPopulation, properties, rnd);
+	protected InitializationOperator loadInitializer(Properties properties, AbstractGrammar grammar) {
 		InitializationOperator op = null;
 		try {
 			op = (InitializationOperator)Class.forName(properties.getProperty(Constants.INITIALIZER_CLASS, Constants.DEFAULT_INITIALIZER_CLASS)).getConstructor(Properties.class,Random.class,AbstractGrammar.class).newInstance(properties,rnd,grammar);
@@ -61,11 +60,9 @@ public abstract class Experiment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		module.addOperator(op);
-		return module;
+		return op;
 	}
-	protected CrossoverModule loadCrossover(Properties properties) {
-		CrossoverModule module = new CrossoverModule(this.generalPopulation, properties, rnd);
+	protected CrossoverOperator loadCrossover(Properties properties) {
 		CrossoverOperator op = null;
 		try {
 			op = (CrossoverOperator)Class.forName(properties.getProperty(Constants.CROSSOVER_CLASS, Constants.DEFAULT_CROSSOVER_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
@@ -74,11 +71,9 @@ public abstract class Experiment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		module.addOperator(op);
-		return module;
+		return op;
 	}
-	protected MutationModule loadMutation(Properties properties) {
-		MutationModule module = new MutationModule(this.generalPopulation, properties, rnd);
+	protected MutationOperator loadMutation(Properties properties) {
 		MutationOperator op = null;
 		try {
 			op = (MutationOperator)Class.forName(properties.getProperty(Constants.MUTATION_CLASS, Constants.DEFAULT_MUTATION_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
@@ -87,11 +82,9 @@ public abstract class Experiment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		module.addOperator(op);
-		return module;
+		return op;
 	}
-	protected FitnessModule loadFitness(Properties properties) {
-		FitnessModule module = new FitnessModule(this.generalPopulation, properties, rnd);
+	protected FitnessEvaluationOperator loadFitness(Properties properties) {
 		FitnessEvaluationOperator op = null;
 		try {
 			op = (FitnessEvaluationOperator)Class.forName(properties.getProperty(Constants.FITNESS_CLASS, Constants.DEFAULT_FITNESS_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
@@ -100,11 +93,9 @@ public abstract class Experiment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		module.addOperator(op);
-		return module;
+		return op;
 	}
-	protected JoinModule loadJoin(Properties properties) {
-		JoinModule module = new JoinModule(this.generalPopulation, properties, rnd, this.selectedlPopulation);
+	protected JoinOperator loadJoin(Properties properties) {
 		JoinOperator op = null;
 		try {
 			op = (JoinOperator)Class.forName(properties.getProperty(Constants.JOIN_CLASS, Constants.DEFAULT_JOIN_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
@@ -113,11 +104,9 @@ public abstract class Experiment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		module.addOperator(op);
-		return module;
+		return op;
 	}
-	protected SelectionModule loadSelection(Properties properties) {
-		SelectionModule module = new SelectionModule(this.generalPopulation, properties, rnd, this.selectedlPopulation);
+	protected SelectionOperator loadSelection(Properties properties) {
 		SelectionOperator op = null;
 		try {
 			op = (SelectionOperator)Class.forName(properties.getProperty(Constants.SELECTION_CLASS, Constants.DEFAULT_SELECTION_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
@@ -126,11 +115,9 @@ public abstract class Experiment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		module.addOperator(op);
-		return module;
+		return op;
 	}
-	protected CollectorModule loadCollector(Properties properties) {
-		CollectorModule module = new CollectorModule(this.generalPopulation, properties, rnd);
+	protected CollectorOperator loadCollector(Properties properties) {
 		CollectorOperator op = null;
 		try {
 			op = (CollectorOperator)Class.forName(properties.getProperty(Constants.COLLECTOR_CLASS, Constants.DEFAULT_COLLECTOR_CLASS)).getConstructor(Properties.class,Random.class).newInstance(properties,rnd);
@@ -139,7 +126,6 @@ public abstract class Experiment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		module.addOperator(op);
-		return module;
+		return op;
 	}
 }

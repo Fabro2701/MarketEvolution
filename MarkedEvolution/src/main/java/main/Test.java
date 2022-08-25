@@ -42,24 +42,40 @@ public class Test extends Experiment{
 		AbstractPipeline initPipeline = new SimplePipeline();
 		
 		AbstractGrammar grammar = this.loadGrammar(properties);
-		InitializationModule initModule = this.loadInitializer(properties, grammar);
 		
-		FitnessModule initFitnessModule = this.loadFitness(properties);
+		InitializationModule initModule = new InitializationModule(generalPopulation, properties,rnd);
+		InitializationOperator rinitOp = this.loadInitializer(properties, grammar);
+		initModule.addOperator(rinitOp);
 		
-		CollectorModule fitnesscollModule = this.loadCollector(properties);
+		FitnessModule initFitnessModule = new FitnessModule(generalPopulation, properties,rnd);
+		FitnessEvaluationOperator fitnessOp = new ProfitFitnessOperator(properties,rnd);
+		initFitnessModule.addOperator(fitnessOp);
+		
+		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
+		Operator fitnesscollOp = new FitnessCollectorOperator(properties,rnd);
+		fitnesscollModule.addOperator(fitnesscollOp);
 
 		//loop
 		AbstractPipeline loopPipeline = new SimplePipeline();
 		
-		SelectionModule selectionModule = this.loadSelection(properties);
+		SelectionModule selectionModule = new SelectionModule(generalPopulation, properties, rnd, selectedPopulation);
+		SelectionOperator selectionOp = this.loadSelection(properties);
+		selectionModule.addOperator(selectionOp);
 		
-		CrossoverModule crossoverModule = this.loadCrossover(properties);
+		CrossoverModule crossoverModule = new CrossoverModule(selectedPopulation, properties, rnd);
+		CrossoverOperator crossoverOp = this.loadCrossover(properties);
+		crossoverModule.addOperator(crossoverOp);
 		
-		MutationModule mutationModule = this.loadMutation(properties);
+		MutationModule mutationModule = new MutationModule(selectedPopulation, properties, rnd);
+		MutationOperator mutationOp = this.loadMutation(properties);
+		mutationModule.addOperator(mutationOp);
 		
-		FitnessModule fitnessModule = this.loadFitness(properties);
+		FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties,rnd);
+		fitnessModule.addOperator(fitnessOp);
 		
-		JoinModule joinModule = this.loadJoin(properties);
+		JoinModule joinModule = new JoinModule(generalPopulation, properties, rnd, selectedPopulation);
+		JoinOperator joinOp = this.loadJoin(properties);
+		joinModule.addOperator(joinOp);
 
 		
 		initPipeline.addModule(initModule);
