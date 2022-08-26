@@ -16,22 +16,20 @@ public class BacktestRenderer extends Renderer{
 	Graphics2D g;
 	final int inCandleSpace = 10;
 	int ini,end;
+	Integer cursor;
 	
 	public BacktestRenderer(DataSeries series) {
 		this.series = series;
 		width = 740;
 		height = 420;
 	}
+	public void update(int cursor) {
+		this.cursor = cursor;
+		draw(ini,end);
+	}
 	public void draw(int ini, int end) {
 		this.ini = ini;
 		this.end = end;
-//		width = series.size();
-//		height = 0;
-//		if(this.bufferImage == null) {
-//			bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-//			bufferGraphics = bufferImage.createGraphics();
-//		}
-		//g.setColor(new Color(0,0,0,255));
 		g.setColor(new Color(255,255,255,255));
 		g.fillRect(0, 0, width, height);
 		
@@ -53,16 +51,27 @@ public class BacktestRenderer extends Renderer{
 			ArrayList<Float> indicator = series.getIndicators().get(key);
 			IndicatorRenderer.draw(g, ini, end, indicator, inCandleSpace,min, max, height);
 		}
+		
+		if(this.cursor!=null) {
+			if(ini<=this.cursor && this.cursor<end) {
+				g.drawLine((cursor-ini)*inCandleSpace+1, 0, (cursor-ini)*inCandleSpace+1, height-1);
+			}
+		}
 	}
+	/**
+	 * Initialize the backtesting viewer based on the shift parameter
+	 * @param shift [0-100]
+	 * @return
+	 */
 	public BufferedImage init(int shift) {//0-100
+		
 		if(bufferImage == null) {
 			bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 			g = bufferImage.createGraphics();
 		}
 		int l=74;
 		shift *= (series.size()-l)/100.f;
-		
-		System.out.println(shift);
+		System.out.println("init: "+shift);
 		this.draw(shift+0, shift+l);
 		
 		return bufferImage;
@@ -77,5 +86,8 @@ public class BacktestRenderer extends Renderer{
 		if(ini>=shift) {
 			this.draw(ini-shift, end-shift);
 		}
+	}
+	public void setCursor(Integer cursor) {
+		this.cursor = cursor;
 	}
 }

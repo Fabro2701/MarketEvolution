@@ -102,6 +102,16 @@ public class BackTest {
 		stats.onClose(ordersManager);
 		return stats; 
 	}
+	public boolean runStep(Strategy strategy, int i, OrdersManager ordersManager) {
+		if(i>=data.size())return false;
+		HashMap<String,String> obs = new HashMap<String,String>();
+		setObservations(obs, data, i, ordersManager);
+		CandleData cd = data.get(i);
+		ordersManager.update(cd);
+		strategy.update(data,i,ordersManager, obs);
+		obs.clear();
+		return true;
+	}
 	private void setObservations(HashMap<String,String> obs, DataSeries data, int idx, OrdersManager ordersManager) {
 		int range=10;
 		for(String key:data.getIndicators().keySet()) {
