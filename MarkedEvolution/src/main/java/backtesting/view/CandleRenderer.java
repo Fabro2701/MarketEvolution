@@ -5,10 +5,7 @@ import java.awt.Graphics2D;
 
 import backtesting.data.CandleData;
 
-public class CandleRenderer {
-	final static int candleWidth=5;
-	final static Color bullColor=new Color(0,255,0,255);
-	final static Color bearColor=new Color(255,0,0,255);
+public class CandleRenderer extends Renderer{
 	public static void draw(Graphics2D g, CandleData cd, int f, float min, float max, int height) {
 		//System.out.println("mm: "+min+" "+max);
 		//System.out.println("candle1: "+cd.getOpen()+" "+cd.getClose());
@@ -31,9 +28,6 @@ public class CandleRenderer {
 			g.fillRect(f, (int)(open), candleWidth, (int)candleBody);
 
 		}
-	}
-	private static float map(float query, float min, float max) {
-		return (query-min)/(max-min);
 	}
 	public static void main2(String args[]) {
 		System.out.println(CandleRenderer.map(0f, 0f, 100f));

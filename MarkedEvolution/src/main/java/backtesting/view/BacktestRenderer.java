@@ -3,11 +3,12 @@ package backtesting.view;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import backtesting.data.CandleData;
 import backtesting.data.DataSeries;
 
-public class BacktestRenderer {
+public class BacktestRenderer extends Renderer{
 	
 	int width, height;
 	DataSeries series;
@@ -30,26 +31,34 @@ public class BacktestRenderer {
 //			bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 //			bufferGraphics = bufferImage.createGraphics();
 //		}
-		g.setColor(new Color(0,0,0,255));
-		//g.setColor(new Color(255,255,255,255));
+		//g.setColor(new Color(0,0,0,255));
+		g.setColor(new Color(255,255,255,255));
 		g.fillRect(0, 0, width, height);
 		
-		float min=series.getClose(ini),max=series.getClose(ini);
-		for(CandleData cd:series) {
+		float min=series.getLow(ini),max=series.getHigh(ini);
+		CandleData cd = null;
+		for(int i=ini;i<end;i++) {
+			cd = series.get(i);
 			min = Math.min(cd.getLow(), min);
 			max = Math.max(cd.getHigh(), max);
 		}
 		
-		
+		//render candles
 		for(int i=ini;i<end;i++) {
-			CandleRenderer.draw(g, series.get(i), (i-ini)*inCandleSpace, min, max, height-5);
+			CandleRenderer.draw(g, series.get(i), (i-ini)*inCandleSpace, min, max, height);
+		}
+		
+		//render indicators
+		for(String key:series.getIndicators().keySet()) {
+			ArrayList<Float> indicator = series.getIndicators().get(key);
+			IndicatorRenderer.draw(g, ini, end, indicator, inCandleSpace,min, max, height);
 		}
 	}
 	public BufferedImage init() {
 		bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 		g = bufferImage.createGraphics();
 		
-		this.draw(0, 74);
+		this.draw(700+0, 700+74);
 		
 		return bufferImage;
 	}
