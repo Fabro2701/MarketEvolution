@@ -20,7 +20,7 @@ public class BacktestRenderer extends Renderer{
 	public BacktestRenderer(DataSeries series) {
 		this.series = series;
 		width = 740;
-		height = 500;
+		height = 420;
 	}
 	public void draw(int ini, int end) {
 		this.ini = ini;
@@ -54,16 +54,23 @@ public class BacktestRenderer extends Renderer{
 			IndicatorRenderer.draw(g, ini, end, indicator, inCandleSpace,min, max, height);
 		}
 	}
-	public BufferedImage init() {
-		bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-		g = bufferImage.createGraphics();
+	public BufferedImage init(int shift) {//0-100
+		if(bufferImage == null) {
+			bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+			g = bufferImage.createGraphics();
+		}
+		int l=74;
+		shift *= (series.size()-l)/100.f;
 		
-		this.draw(700+0, 700+74);
+		System.out.println(shift);
+		this.draw(shift+0, shift+l);
 		
 		return bufferImage;
 	}
 	public void right(int shift) {
-		this.draw(ini+shift, end+shift);
+		if(end+shift<=series.size()) {
+			this.draw(ini+shift, end+shift);
+		}
 		
 	}
 	public void left(int shift) {

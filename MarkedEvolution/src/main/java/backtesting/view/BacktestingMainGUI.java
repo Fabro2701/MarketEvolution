@@ -21,7 +21,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     	indTableModel = new DefaultTableModel();
         BackTest t = new BackTest("EURUSD=X");
         backtestRenderer = new BacktestRenderer(t.getData());
-        backtestImg = new JLabel(new ImageIcon(backtestRenderer.init()));
+        backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(0)));
         initComponents();
         jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
     }
@@ -50,6 +50,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         jbChoose = new javax.swing.JButton();
         jbLeft = new javax.swing.JButton();
         jbRight = new javax.swing.JButton();
+        jSlider1 = new javax.swing.JSlider();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1400, 701));
@@ -162,6 +163,13 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
             }
         });
 
+        jSlider1.setValue(0);
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -173,7 +181,9 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jbLeft)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbRight))
+                        .addComponent(jbRight)
+                        .addGap(40, 40, 40)
+                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPaneBacktestingVisualization, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -187,9 +197,11 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPaneBacktestingVisualization, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jbLeft)
-                            .addComponent(jbRight))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jbLeft)
+                                .addComponent(jbRight))
+                            .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPaneTable, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -210,7 +222,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                       
+    }// </editor-fold>                        
 
     private void jbLeftActionPerformed(java.awt.event.ActionEvent evt) {                                       
     	backtestRenderer.left(1);
@@ -220,8 +232,12 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     private void jbRightActionPerformed(java.awt.event.ActionEvent evt) {                                        
     	backtestRenderer.right(1);
     	this.jScrollPaneBacktestingVisualization.repaint();
-    }                                
-
+    }     
+    
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {                                      
+    	backtestRenderer.init(this.jSlider1.getValue());
+    	this.jScrollPaneBacktestingVisualization.repaint();
+    }   
     /**
      * @param args the command line arguments
      */
@@ -264,6 +280,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPaneBacktestingVisualization;
     private javax.swing.JScrollPane jScrollPaneTable;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton jbChoose;
     private javax.swing.JButton jbLeft;
