@@ -62,8 +62,14 @@ public class Evaluator {
 		}
 		
 		if(type.contains("ReturnStatement")) {
-			return _evaluate(query.getJSONObject("result"));
-			//return query.getString("result");
+			int op = 1;
+			if(op==0) {//numerical
+				return _evaluate(query.getJSONObject("result"));
+			}
+			else {//string
+				return query.getString("result");
+			}
+			//
 		}
 		
 		if(type.contains("Literal")) {

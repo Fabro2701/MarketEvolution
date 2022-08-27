@@ -13,11 +13,16 @@ public class OrdersManager {
 		openOrders = new ArrayList<Order>();
 		closedOrders = new ArrayList<Order>();
 	}
-	public void update(CandleData newCandle) {
+	public void update(CandleData newCandle, int idx) {
 		boolean delete = false;
 		for(int i=0;i<openOrders.size();i++) {
-			delete = openOrders.get(i).update(newCandle);
+			Order or = openOrders.get(i);
+			delete = or.update(newCandle);
 			if(delete) {
+				or.setFidx(idx);
+				or.setClosePrice(newCandle.getOpen());
+				or.close();
+				closedOrders.add(or);
 				openOrders.remove(i);
 				i--;
 			}
@@ -38,6 +43,8 @@ public class OrdersManager {
 				closedOrders.add(order);
 				openOrders.remove(order);
 				order.setClosePrice(o.getOpenPrice());
+				order.setFidx(o.getIdx());
+				order.close();
 				return;
 			}
 		}

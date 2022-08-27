@@ -33,6 +33,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         backtestRenderer = new BacktestRenderer(indSimulation.backtest.getData());
         backtestRenderer.setCursor(indSimulation.cursor);
         backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(41)));
+        backtestRenderer.setOrdersManager(indSimulation.ordersManager); 
         initComponents();
         jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
         this.jbStopInd.setEnabled(false);
@@ -47,8 +48,11 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     	public IndividualSimulation() {
     		backtest = new BackTest("EURUSD=X");
     		cursor=500;
-    		String code = "if(true){"
-    					+ "return 0;"
+    		String code = "if(ma25[3]>close[3]){"
+    					+ "return BUY;"
+    					+ "}"
+    					+ "else{"
+    					+ "return SELL;"
     					+ "}";
     		Parser parser = new Parser();
     		Evaluator eva = new Evaluator(parser.parse(code));

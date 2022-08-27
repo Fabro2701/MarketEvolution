@@ -19,12 +19,12 @@ public class CandleRenderer extends Renderer{
 		g.setColor(Color.black);
 		g.drawLine(f+candleWidth/2, (int)low, f+candleWidth/2, (int)high);
 		if(cd.getClose() >= cd.getOpen()){//bull
-			g.setColor(bullColor);
+			g.setColor(BULL_COLOR);
 			g.fillRect(f, (int)(close), candleWidth, (int)candleBody);
 			
 		}
 		else {//bear
-			g.setColor(bearColor);
+			g.setColor(BEAR_COLOR);
 			g.fillRect(f, (int)(open), candleWidth, (int)candleBody);
 
 		}

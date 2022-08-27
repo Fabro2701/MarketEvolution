@@ -26,7 +26,7 @@ public class Strategy {
 		
 		OrderType next = this.evaluator.getNext();
 		if(next == OrderType.BUY || next == OrderType.SELL) {
-			ordersManager.addOrder(new FixedTimeOrder(cont,1.f,data.getOpen(i),next, 10));
+			ordersManager.addOrder(new FixedTimeOrder(cont,i,1.f,data.getOpen(i),next, 10));
 			cont++;
 		}
 		else {

@@ -94,7 +94,7 @@ public class BackTest {
 		for(int i=200;i<data.size();i++) {
 			setObservations(obs, data, i, ordersManager);
 			cd = data.get(i);
-			ordersManager.update(cd);
+			ordersManager.update(cd,i);
 			strategy.update(data,i,ordersManager, obs);
 			obs.clear();
 		}
@@ -107,7 +107,7 @@ public class BackTest {
 		HashMap<String,String> obs = new HashMap<String,String>();
 		setObservations(obs, data, i, ordersManager);
 		CandleData cd = data.get(i);
-		ordersManager.update(cd);
+		ordersManager.update(cd,i);
 		strategy.update(data,i,ordersManager, obs);
 		obs.clear();
 		return true;
