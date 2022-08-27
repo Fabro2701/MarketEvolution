@@ -1,11 +1,17 @@
 package backtesting.view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import backtesting.BackTest;
 import backtesting.order.OrdersManager;
@@ -45,21 +51,23 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     	Strategy strategy;
     	OrdersManager ordersManager;
 		public long delay;
-    	public IndividualSimulation() {
-    		backtest = new BackTest("EURUSD=X");
+    	public IndividualSimulation(String code, String datafile) {
+    		backtest = new BackTest(datafile);
     		cursor=500;
-    		String code = "if(ma25[3]>close[3]){"
-    					+ "return BUY;"
-    					+ "}"
-    					+ "else{"
-    					+ "return SELL;"
-    					+ "}";
     		Parser parser = new Parser();
     		Evaluator eva = new Evaluator(parser.parse(code));
     		strategy = new Strategy();
     		strategy.setEvaluator(eva);
     		ordersManager = new OrdersManager();
     		delay = 1000;
+    	}
+    	public IndividualSimulation() {
+    		this("if(ma25[3]>close[3]){"
+    					+ "return BUY;"
+    					+ "}"
+    					+ "else{"
+    					+ "return SELL;"
+    					+ "}", "NVDA");
     	}
     }
 
@@ -72,7 +80,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-    	jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPaneBacktestingVisualization = new javax.swing.JScrollPane();
         jScrollPaneTable = new javax.swing.JScrollPane();
         jIndividualTable = new javax.swing.JTable();
@@ -156,10 +164,20 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         jpIndAnalysis.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
 
         jbLoad.setText("Load");
+        jbLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbLoadActionPerformed(evt);
+            }
+        });
 
         jtfLoadFile.setText("resources/loads/test.json");
 
         jbChoose.setText("Choose");
+        jbChoose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbChooseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jpIndAnalysisLayout = new javax.swing.GroupLayout(jpIndAnalysis);
         jpIndAnalysis.setLayout(jpIndAnalysisLayout);
@@ -296,7 +314,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                      
+    }// </editor-fold>                    
 
     private void jbLeftActionPerformed(java.awt.event.ActionEvent evt) {                                       
     	backtestRenderer.left(1);
@@ -329,7 +347,28 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         this.jbStopInd.setEnabled(true);
         indStop = false;
         runIndSimulation();
-    }             
+    }   
+
+    private void jbChooseActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+    }                                        
+
+    private void jbLoadActionPerformed(java.awt.event.ActionEvent evt) {  
+    	JSONObject o=null;
+		try {
+			o = new JSONObject(new JSONTokener(new FileInputStream(this.jtfLoadFile.getText())));
+		} catch (JSONException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+        this.indSimulation = new IndividualSimulation(o.getString("code"),o.getString("datafile"));
+        backtestRenderer = new BacktestRenderer(indSimulation.backtest.getData());
+        backtestRenderer.setCursor(indSimulation.cursor);
+        backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(41)));
+        backtestRenderer.setOrdersManager(indSimulation.ordersManager); 
+        jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
+    }    
     private void runIndSimulation() {
 		if(!indStop) {
 			
@@ -338,6 +377,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
 				this.backtestRenderer.update(indSimulation.cursor);
 		    	this.jScrollPaneBacktestingVisualization.repaint();
 				indSimulation.cursor++;
+				this.jSlider1.setValue(100*indSimulation.cursor/indSimulation.backtest.getData().size());
 				
 		    	SwingUtilities.invokeLater(()->{
 		    		try {
