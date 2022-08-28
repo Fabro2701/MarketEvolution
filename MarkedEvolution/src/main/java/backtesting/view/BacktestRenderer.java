@@ -34,9 +34,9 @@ public class BacktestRenderer extends Renderer{
 	public void draw(int ini, int end) {
 		this.ini = ini;
 		this.end = end;
-		g.setColor(new Color(255,255,255,255));
+		g.setColor(new Color(0,0,0,255));
 		g.fillRect(0, 0, width, height);
-		g.setColor(new Color(0,0,0,100));
+		//g.setColor(new Color(0,0,0,100));
 		g.fillRect(0, 0, width, height);
 		
 		float min=series.getLow(ini),max=series.getHigh(ini);

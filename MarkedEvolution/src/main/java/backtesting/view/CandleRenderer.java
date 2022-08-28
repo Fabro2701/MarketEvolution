@@ -16,7 +16,7 @@ public class CandleRenderer extends Renderer{
 		float candleBody = Math.abs(open-close);
 		//System.out.println("candle2: "+open+" "+close);
 		
-		g.setColor(Color.black);
+		g.setColor(new Color(167,167,167,255));
 		g.drawLine(f+candleWidth/2, (int)low, f+candleWidth/2, (int)high);
 		if(cd.getClose() >= cd.getOpen()){//bull
 			g.setColor(BULL_COLOR);
