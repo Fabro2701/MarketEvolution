@@ -1,10 +1,14 @@
 package backtesting.view;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -16,6 +20,9 @@ import org.json.JSONTokener;
 import backtesting.BackTest;
 import backtesting.order.OrdersManager;
 import backtesting.strategy.Strategy;
+import main.Test;
+import model.Experiment;
+import model.algorithm.BasicSearchAlgorithm;
 import model.grammar.Evaluator;
 import model.grammar.Parser;
 
@@ -28,6 +35,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
 	JLabel backtestImg;
 	BacktestRenderer backtestRenderer;
 	IndividualSimulation indSimulation;
+	Experiment experiment;
 	boolean indStop;
     /**
      * Creates new form MainGUI
@@ -44,6 +52,15 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
         this.jbStopInd.setEnabled(false);
         indStop = true;
+        
+        experiment = new Test(new SwingSearchAlgorithm());
+        Properties properties = new Properties();
+		try { 
+			properties.load(new FileInputStream(new File("resources/properties/default.properties")));
+		} catch (IOException e) {e.printStackTrace(); } 
+		
+		experiment.setup(properties);
+        experiment.run(properties);
     }
     public class IndividualSimulation{
     	BackTest backtest;
@@ -53,7 +70,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
 		public long delay;
     	public IndividualSimulation(String code, String datafile) {
     		backtest = new BackTest(datafile);
-    		cursor=500;
+    		cursor = 500;
     		Parser parser = new Parser();
     		Evaluator eva = new Evaluator(parser.parse(code));
     		strategy = new Strategy();
@@ -68,6 +85,31 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     					+ "else{"
     					+ "return SELL;"
     					+ "}", "NVDA");
+    	}
+    }
+    public class SwingSearchAlgorithm extends BasicSearchAlgorithm{
+    	@Override
+    	public void run(int its) {
+    		long start = System.currentTimeMillis();
+    		init();
+    		System.out.println("-----------------------------------------Genration done in: "+(System.currentTimeMillis()-start)+"-----------------------------------------");
+
+    		this.runSwingaux(its,its);
+    		
+    		System.out.println("-----------------------------------------Simulation done in: "+(System.currentTimeMillis()-start)+"-----------------------------------------");
+    	}
+    	private void runSwingaux(int its, int totalits) {
+    		if(its>0) {
+    			System.out.println("Starting Generation "+-(its));
+    			long start2 = System.currentTimeMillis();
+    			step();
+    			System.out.println("-----------------------------------------Genration done in: "+(System.currentTimeMillis()-start2)+"-----------------------------------------");
+    			BacktestingMainGUI.this.jProgressBar1.setValue(100*(totalits-its)/totalits);
+    			SwingUtilities.invokeLater(()->{
+    				this.runSwingaux(its-1,totalits);
+    			});
+    			
+    		}
     	}
     }
 
@@ -350,7 +392,8 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     }   
 
     private void jbChooseActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        //pending
     }                                        
 
     private void jbLoadActionPerformed(java.awt.event.ActionEvent evt) {  
@@ -368,6 +411,9 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(41)));
         backtestRenderer.setOrdersManager(indSimulation.ordersManager); 
         jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
+        this.jbStopInd.setEnabled(false);
+        this.jbPlayInd.setEnabled(true);
+        indStop = true;
     }    
     private void runIndSimulation() {
 		if(!indStop) {

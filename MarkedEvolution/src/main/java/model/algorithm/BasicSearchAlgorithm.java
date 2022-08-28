@@ -1,5 +1,7 @@
 package model.algorithm;
 
+import javax.swing.SwingUtilities;
+
 import model.individual.Population;
 
 public class BasicSearchAlgorithm extends AbstractSearchAlgorithm{
@@ -29,4 +31,5 @@ public class BasicSearchAlgorithm extends AbstractSearchAlgorithm{
 		System.out.println("-----------------------------------------Simulation done in: "+(System.currentTimeMillis()-start)+"-----------------------------------------");
 	}
 
+	
 }

@@ -37,6 +37,12 @@ import model.module.operator.selection.SelectionOperator;
 import model.module.operator.selection.TournamentSelectionOperator;
 
 public class Test extends Experiment{
+	public Test(AbstractSearchAlgorithm algo) {
+		super(algo);
+	}
+	public Test() {
+		super();
+	}
 	@Override
 	public void setup(Properties properties) {
 		AbstractPipeline initPipeline = new SimplePipeline();

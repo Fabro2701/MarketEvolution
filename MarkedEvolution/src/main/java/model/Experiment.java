@@ -28,12 +28,15 @@ public abstract class Experiment {
 	protected Population generalPopulation;
 	protected Population selectedPopulation;
 	protected Random rnd;
-	
-	public Experiment() {
-		algorithm = new BasicSearchAlgorithm();
+
+	public Experiment(AbstractSearchAlgorithm algorithm) {
+		this.algorithm  = algorithm;
 		generalPopulation = new Population();
 		selectedPopulation = new Population();
 		rnd = new Random();
+	}
+	public Experiment() {
+		this(new BasicSearchAlgorithm());
 	}
 	public abstract void setup(Properties properties);
 	public void run(Properties properties) {
