@@ -39,7 +39,6 @@ public class Individual implements Comparable<Individual>{
 		this.evaluated = false;
 		this.phenotype.init(grammar.parse(genotype.getChromosome()));
 		this.valid = this.phenotype.isValid();
-		
 	}
 	public Genotype getGenotype() {
 		return genotype;

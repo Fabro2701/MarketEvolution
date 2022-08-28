@@ -33,8 +33,9 @@ public abstract class Experiment {
 		this.algorithm  = algorithm;
 		generalPopulation = new Population();
 		selectedPopulation = new Population();
-		rnd = new Random();
+		rnd = new Random(3);
 	}
+
 	public Experiment() {
 		this(new BasicSearchAlgorithm());
 	}

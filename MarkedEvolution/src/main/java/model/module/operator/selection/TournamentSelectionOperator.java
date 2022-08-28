@@ -27,7 +27,6 @@ public class TournamentSelectionOperator extends SelectionOperator{
 
 	@Override
 	public void seletPopulation(Population population) {
-		population.sort(Comparator.comparing(Individual::getFitness));
 		for(int i=0;i<selectionSize;i++) {
 			this.selectedPopulation.add(new Individual(getWinner(population)));
 		}
@@ -38,6 +37,11 @@ public class TournamentSelectionOperator extends SelectionOperator{
 			l.add(population.get(rnd.nextInt(population.size())));
 		}
 		l.sort(Comparator.comparing(Individual::getFitness));
+//		for(Individual ind:l) {
+//			System.out.print(ind.getFitness()+" , ");
+//		}System.out.println();
+//		if(l.get(l.size()-1).isValid())System.out.println("winner: "+l.get(l.size()-1).getPhenotype().getVisualCode());
+//		else System.out.println("unvalid winner");
 		return l.get(l.size()-1);
 	}
 

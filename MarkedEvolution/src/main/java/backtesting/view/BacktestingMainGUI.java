@@ -11,7 +11,10 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.json.JSONException;
@@ -55,16 +58,28 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     	header.add("fitness");
     	indTableModel = new DefaultTableModel(tableData,header);
     	
-    	indSimulation = new IndividualSimulation();
-        backtestRenderer = new BacktestRenderer(indSimulation.backtest.getData());
-        backtestRenderer.setCursor(indSimulation.cursor);
-        backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(41)));
-        backtestRenderer.setOrdersManager(indSimulation.ordersManager); 
+//    	indSimulation = new IndividualSimulation();
+//        backtestRenderer = new BacktestRenderer(indSimulation.backtest.getData());
+//        backtestRenderer.setCursor(indSimulation.cursor);
+//        backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(41)));
+//        backtestRenderer.setOrdersManager(indSimulation.ordersManager); 
         initComponents();
-        jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
-        this.jbStopInd.setEnabled(false);
-        indStop = true;
+//        jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
+//        this.jbStopInd.setEnabled(false);
+//        indStop = true;
         
+        
+        ListSelectionModel cellSelectionModel = this.jIndividualTable.getSelectionModel();
+		cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
+		        public void valueChanged(ListSelectionEvent e) {
+		        	runIndSimulationFromTableSelection(jIndividualTable.getSelectedRow());
+	
+		
+		        }
+
+				
+		});
         
         experiment = new Test(new SwingSearchAlgorithm());
         properties = new Properties();
@@ -128,11 +143,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         			updateTable(this.initPipeline.get(0).getPopulation());
         			BacktestingMainGUI.this.jIndividualTable.repaint();
         			BacktestingMainGUI.this.jScrollPaneTable.repaint();
-        		}
-    			
-    			
-    			
-    			
+        		}	
     		}
     		SwingUtilities.invokeLater(()->{
 				this.run(its-1);
@@ -493,6 +504,18 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     private void jbStopActionPerformed(java.awt.event.ActionEvent evt) {                                       
     	this.evoStop = true;
     }   
+    private void runIndSimulationFromTableSelection(int selectedRow) {
+		String code = ((Individual)this.indTableModel.getValueAt(selectedRow, 0)).getPhenotype().getVisualCode();
+		this.indSimulation = new IndividualSimulation(code,"NVDA");
+        backtestRenderer = new BacktestRenderer(indSimulation.backtest.getData());
+        backtestRenderer.setCursor(indSimulation.cursor);
+        backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(41)));
+        backtestRenderer.setOrdersManager(indSimulation.ordersManager); 
+        jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
+        this.jbStopInd.setEnabled(false);
+        this.jbPlayInd.setEnabled(true);
+        indStop = true;
+	}
 	/**
      * @param args the command line arguments
      */

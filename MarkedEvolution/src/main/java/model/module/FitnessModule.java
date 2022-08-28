@@ -22,7 +22,6 @@ public class FitnessModule extends Module{
 		// TODO Auto-generated constructor stub
 	}
 	
-	//2pm 85
 	@Override
 	public void execute() {
 		ForkJoinPool pool = ForkJoinPool.commonPool();

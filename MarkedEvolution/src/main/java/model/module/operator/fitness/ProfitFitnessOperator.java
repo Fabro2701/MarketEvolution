@@ -12,9 +12,7 @@ public class ProfitFitnessOperator extends FitnessEvaluationOperator{
 	BackTest backtest;
 	public ProfitFitnessOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
-		backtest = new BackTest("EURUSD=X");
-		//backtest.loadData("EURUSD=X");
-	
+		backtest = new BackTest("NVDA");	
 	}
 
 	@Override
