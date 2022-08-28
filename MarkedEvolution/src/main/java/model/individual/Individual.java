@@ -95,5 +95,10 @@ public class Individual implements Comparable<Individual>{
             return 0;
         }
 	}
+	@Override 
+	public String toString() {
+		if(this.phenotype.isValid())return this.phenotype.getVisualCode();
+		else return "no valid individual";
+	}
 	
 }

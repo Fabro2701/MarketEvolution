@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
@@ -21,10 +22,13 @@ import backtesting.BackTest;
 import backtesting.order.OrdersManager;
 import backtesting.strategy.Strategy;
 import main.Test;
+import model.Constants;
 import model.Experiment;
 import model.algorithm.BasicSearchAlgorithm;
 import model.grammar.Evaluator;
 import model.grammar.Parser;
+import model.individual.Individual;
+import model.individual.Population;
 
 /**
  *
@@ -32,16 +36,24 @@ import model.grammar.Parser;
  */
 public class BacktestingMainGUI extends javax.swing.JFrame {
 	DefaultTableModel indTableModel;
+	Vector<Vector<Object>>tableData;
+	Vector<Object>header;
 	JLabel backtestImg;
 	BacktestRenderer backtestRenderer;
 	IndividualSimulation indSimulation;
 	Experiment experiment;
-	boolean indStop;
+	boolean indStop,evoStop;
+	Properties properties;
+	int iterations,currentIteration;
     /**
      * Creates new form MainGUI
      */
     public BacktestingMainGUI() {
-    	indTableModel = new DefaultTableModel();
+    	tableData=new Vector<Vector<Object>>();
+    	header=new Vector<Object>();
+    	header.add("individual");
+    	header.add("fitness");
+    	indTableModel = new DefaultTableModel(tableData,header);
     	
     	indSimulation = new IndividualSimulation();
         backtestRenderer = new BacktestRenderer(indSimulation.backtest.getData());
@@ -53,14 +65,19 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         this.jbStopInd.setEnabled(false);
         indStop = true;
         
+        
         experiment = new Test(new SwingSearchAlgorithm());
-        Properties properties = new Properties();
+        properties = new Properties();
 		try { 
 			properties.load(new FileInputStream(new File("resources/properties/default.properties")));
 		} catch (IOException e) {e.printStackTrace(); } 
 		
 		experiment.setup(properties);
-        experiment.run(properties);
+		evoStop = true;
+		iterations = Integer.parseInt(properties.getProperty(Constants.ITERATIONS,Constants.DEFAULT_ITERATIONS));
+		currentIteration = 0;
+		//experiment.run(properties);
+		
     }
     public class IndividualSimulation{
     	BackTest backtest;
@@ -88,29 +105,54 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     	}
     }
     public class SwingSearchAlgorithm extends BasicSearchAlgorithm{
+    	boolean ini=false;
     	@Override
     	public void run(int its) {
-    		long start = System.currentTimeMillis();
-    		init();
-    		System.out.println("-----------------------------------------Genration done in: "+(System.currentTimeMillis()-start)+"-----------------------------------------");
-
-    		this.runSwingaux(its,its);
-    		
-    		System.out.println("-----------------------------------------Simulation done in: "+(System.currentTimeMillis()-start)+"-----------------------------------------");
-    	}
-    	private void runSwingaux(int its, int totalits) {
-    		if(its>0) {
-    			System.out.println("Starting Generation "+-(its));
-    			long start2 = System.currentTimeMillis();
-    			step();
-    			System.out.println("-----------------------------------------Genration done in: "+(System.currentTimeMillis()-start2)+"-----------------------------------------");
-    			BacktestingMainGUI.this.jProgressBar1.setValue(100*(totalits-its)/totalits);
-    			SwingUtilities.invokeLater(()->{
-    				this.runSwingaux(its-1,totalits);
-    			});
+    		if(its>0 && !BacktestingMainGUI.this.evoStop) {
+    			if(!ini) {
+        			init();
+        			ini = true;
+        		}
+        		else {
+        			
+        			currentIteration++;
+        			currentIteration%=BacktestingMainGUI.this.iterations;
+        			System.out.println("Starting Generation "+(currentIteration));
+        			long start2 = System.currentTimeMillis();
+        			step();
+        			System.out.println("-----------------------------------------Genration done in: "+(System.currentTimeMillis()-start2)+"-----------------------------------------");
+        			
+        			BacktestingMainGUI.this.jProgressBar1.setValue(100*(currentIteration)/BacktestingMainGUI.this.iterations);
+        			
+        			//update table
+        			updateTable(this.initPipeline.get(0).getPopulation());
+        			BacktestingMainGUI.this.jIndividualTable.repaint();
+        			BacktestingMainGUI.this.jScrollPaneTable.repaint();
+        		}
+    			
+    			
+    			
     			
     		}
+    		SwingUtilities.invokeLater(()->{
+				this.run(its-1);
+			});
+    		 	
     	}
+  
+		private void updateTable(Population population) {
+
+			System.out.println("updating table");
+			BacktestingMainGUI.this.tableData.clear();
+			for(Individual ind:population) {
+				Vector<Object>v = new Vector<Object>();
+				v.add(ind);
+				v.add(ind.getFitness());
+				BacktestingMainGUI.this.indTableModel.addRow(v);
+			}
+			System.out.println("new table size: "+BacktestingMainGUI.this.jIndividualTable.getRowCount());
+			//BacktestingMainGUI.this.indTableModel.setValueAt("5", 0, 0);
+		}
     }
 
     /**
@@ -158,24 +200,26 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
 
         jScrollPaneTable.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
 
-        jIndividualTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jIndividualTable.setModel(
+        		this.indTableModel
+        		);
         jScrollPaneTable.setViewportView(jIndividualTable);
 
         jpEvoConfig.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 0)));
 
         jbRun.setText("Run");
+        jbRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbRunActionPerformed(evt);
+            }
+        });
 
         jbStop.setText("Stop");
+        jbStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbStopActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jpEvoConfigLayout = new javax.swing.GroupLayout(jpEvoConfig);
         jpEvoConfig.setLayout(jpEvoConfigLayout);
@@ -356,7 +400,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                    
+    }// </editor-fold>                   
 
     private void jbLeftActionPerformed(java.awt.event.ActionEvent evt) {                                       
     	backtestRenderer.left(1);
@@ -441,6 +485,14 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
 		
 	}
 
+    private void jbRunActionPerformed(java.awt.event.ActionEvent evt) {                                      
+        this.evoStop = false;
+        experiment.run(properties);
+    }                                     
+
+    private void jbStopActionPerformed(java.awt.event.ActionEvent evt) {                                       
+    	this.evoStop = true;
+    }   
 	/**
      * @param args the command line arguments
      */

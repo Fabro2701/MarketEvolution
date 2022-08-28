@@ -24,5 +24,4 @@ public abstract class AbstractSearchAlgorithm {
 	public void setLoopPipeline(AbstractPipeline loopPipeline) {
 		this.loopPipeline = loopPipeline;
 	}
-	
 }

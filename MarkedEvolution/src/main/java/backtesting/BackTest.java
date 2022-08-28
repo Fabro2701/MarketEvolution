@@ -33,17 +33,17 @@ public class BackTest {
 	public BackTest(String filename) {
 		loadData(filename);
 		
-//		int period=200;
-//		MAIndicator mat = new MAIndicator(period);
-//		Transformer mattrans = new AdditionTransformer("ma",period,mat);
-//		mattrans.apply(data);
-//		
-//		SDIndicator sd = new SDIndicator(period);
-//		Transformer sdtrans = new AdditionTransformer("sd",period,sd);
-//		sdtrans.apply(data);
-//		
-//		Transformer norm = new NormalizationTransformer(period);
-//		norm.apply(data);
+		int period=200;
+		MAIndicator mat = new MAIndicator(period);
+		Transformer mattrans = new AdditionTransformer("ma",period,mat);
+		mattrans.apply(data);
+		
+		SDIndicator sd = new SDIndicator(period);
+		Transformer sdtrans = new AdditionTransformer("sd",period,sd);
+		sdtrans.apply(data);
+		
+		Transformer norm = new NormalizationTransformer(period);
+		norm.apply(data);
 		
 		
 		for(int p:new int[] {25,50,200}) {

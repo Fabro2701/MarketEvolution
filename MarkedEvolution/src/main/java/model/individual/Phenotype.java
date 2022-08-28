@@ -21,6 +21,7 @@ public class Phenotype {
 	public Phenotype(Phenotype copy) {
 		valid = copy.valid;
 		strategy = new Strategy(copy.strategy);
+		visualization = copy.visualization;
 	}
 	public boolean isValid() {
 		return valid;
