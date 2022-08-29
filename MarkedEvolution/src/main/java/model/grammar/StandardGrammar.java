@@ -23,11 +23,9 @@ public class StandardGrammar extends AbstractGrammar{
 		List<Production> ps;
 		LinkedList<Symbol> q = new LinkedList<Symbol>();
 		LinkedList<Symbol> terminals = new LinkedList<Symbol>();
-		// = new ArrayList<Production>(); 
-		// ps.addAll(0,g.productions.get(init));
+		
 		int limit=100;
 		int i=0;
-		int cont=0;
 		int calls=0;
 		while(true) {
 			ps = this.getRule(t);
@@ -38,23 +36,19 @@ public class StandardGrammar extends AbstractGrammar{
 			c.setModToCodon(i, r);
 			q.addAll(0, ps.get(r));
 			
-			//terminals.add(g.new Terminal("("));
 			calls++;
 			while(!q.isEmpty() && q.getFirst().getType()==SymbolType.Terminal) {
-				if(!q.getFirst().toString().equals(")"))cont++;
 				terminals.add(q.pop());
 			}
 			
 			if(q.isEmpty())break;
 			
 			t = q.pop();
-			//q.add(0, g.new Terminal(")"));
 			i++;
 			i %= c.getLength();
 			if(calls>=limit)return null;
 		}
 		c.setUsedCodons(calls);
-		//terminals.add(g.new Symbol(")",Grammar.SymbolType.Terminal));
 
 		
 		return terminals;

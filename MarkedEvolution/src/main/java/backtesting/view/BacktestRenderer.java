@@ -37,7 +37,7 @@ public class BacktestRenderer extends Renderer{
 		g.setColor(new Color(0,0,0,255));
 		g.fillRect(0, 0, width, height);
 		//g.setColor(new Color(0,0,0,100));
-		g.fillRect(0, 0, width, height);
+		//g.fillRect(0, 0, width, height);
 		
 		float min=series.getLow(ini),max=series.getHigh(ini);
 		CandleData cd = null;

@@ -23,6 +23,7 @@ import model.module.MutationModule;
 import model.module.SelectionModule;
 import model.module.operator.Operator;
 import model.module.operator.collector.FitnessCollectorOperator;
+import model.module.operator.collector.SimilarityCollectorOperator;
 import model.module.operator.crossover.CrossoverOperator;
 import model.module.operator.crossover.OnePointCrossoverOperator;
 import model.module.operator.fitness.FitnessEvaluationOperator;
@@ -83,6 +84,10 @@ public class Test extends Experiment{
 		JoinModule joinModule = new JoinModule(generalPopulation, properties, rnd, selectedPopulation);
 		JoinOperator joinOp = this.loadJoin(properties);
 		joinModule.addOperator(joinOp);
+		
+		CollectorModule simicollModule = new CollectorModule(generalPopulation, properties,rnd);
+		Operator simicollOp = new SimilarityCollectorOperator(properties,rnd);
+		simicollModule.addOperator(simicollOp);
 
 		
 		initPipeline.addModule(initModule);
@@ -95,6 +100,7 @@ public class Test extends Experiment{
 		loopPipeline.addModule(fitnessModule);
 		loopPipeline.addModule(joinModule);
 		loopPipeline.addModule(fitnesscollModule);
+		loopPipeline.addModule(simicollModule);
 		
 		this.algorithm.setInitPipeline(initPipeline);
 		this.algorithm.setLoopPipeline(loopPipeline);

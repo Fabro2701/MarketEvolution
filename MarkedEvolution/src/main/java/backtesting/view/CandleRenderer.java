@@ -6,7 +6,8 @@ import java.awt.Graphics2D;
 import backtesting.data.CandleData;
 
 public class CandleRenderer extends Renderer{
-	public static void draw(Graphics2D g, CandleData cd, int f, float min, float max, int height) {
+	private static Color SHADOW_COLOR=new Color(167,167,167,255);
+	public static void draw(Graphics2D g, CandleData cd, int shift, float min, float max, int height) {
 		//System.out.println("mm: "+min+" "+max);
 		//System.out.println("candle1: "+cd.getOpen()+" "+cd.getClose());
 		float open = map(cd.getOpen(),max,min)*height;
@@ -16,16 +17,16 @@ public class CandleRenderer extends Renderer{
 		float candleBody = Math.abs(open-close);
 		//System.out.println("candle2: "+open+" "+close);
 		
-		g.setColor(new Color(167,167,167,255));
-		g.drawLine(f+candleWidth/2, (int)low, f+candleWidth/2, (int)high);
+		g.setColor(SHADOW_COLOR);
+		g.drawLine(shift+candleWidth/2, (int)low, shift+candleWidth/2, (int)high);
 		if(cd.getClose() >= cd.getOpen()){//bull
 			g.setColor(BULL_COLOR);
-			g.fillRect(f, (int)(close), candleWidth, (int)candleBody);
+			g.fillRect(shift, (int)(close), candleWidth, (int)candleBody);
 			
 		}
 		else {//bear
 			g.setColor(BEAR_COLOR);
-			g.fillRect(f, (int)(open), candleWidth, (int)candleBody);
+			g.fillRect(shift, (int)(open), candleWidth, (int)candleBody);
 
 		}
 	}
