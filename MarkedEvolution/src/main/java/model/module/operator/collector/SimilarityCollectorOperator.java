@@ -21,15 +21,10 @@ public class SimilarityCollectorOperator extends CollectorOperator{
 	public void collect() {
 		ArrayList<ArrayList<Float>> matrix = Util.genotypeSimilarityMatrix(objetivePopulation);
 		float avg = matrix.stream().map(l->l.stream().reduce(0.f,Float::sum)).reduce(0.f,Float::sum) / (objetivePopulation.size()*(objetivePopulation.size()-1));
-
 		System.out.println("Average genotype similarity: "+avg);	
 	}
 	@Override
 	public void setProperties(Properties properties) {
 		// TODO Auto-generated method stub
-		
 	}
-
-
-
 }

@@ -33,7 +33,7 @@ public abstract class Experiment {
 		this.algorithm  = algorithm;
 		generalPopulation = new Population();
 		selectedPopulation = new Population();
-		rnd = new Random(3);
+		rnd = new Random();
 	}
 
 	public Experiment() {

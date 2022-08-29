@@ -9,6 +9,7 @@ import backtesting.data.CandleData;
 import backtesting.data.DataSeries;
 import backtesting.order.Order;
 import backtesting.order.OrdersManager;
+import model.grammar.Evaluator;
 
 public class BacktestRenderer extends Renderer{
 	
@@ -19,7 +20,9 @@ public class BacktestRenderer extends Renderer{
 	final int inCandleSpace = 10;
 	int ini,end;
 	Integer cursor;
+	String code;
 	OrdersManager ordersManager;
+	Evaluator evaluator;
 	
 	
 	public BacktestRenderer(DataSeries series) {
@@ -77,6 +80,14 @@ public class BacktestRenderer extends Renderer{
 				g.drawLine((cursor-ini)*inCandleSpace+1, 0, (cursor-ini)*inCandleSpace+1, height-1);
 			}
 		}
+		//g.drawString("asdfasdfasdfa\npoioioio", 0, 10);
+		g.setColor(Color.white);
+		if(this.code!=null) {
+			g.drawString(code, 0, 10);
+		}
+		if(this.evaluator!=null) {
+			g.drawString(evaluator.getLastResult(), 0, 20);
+		}
 	}
 	/**
 	 * Initialize the backtesting viewer based on the shift parameter
@@ -111,5 +122,12 @@ public class BacktestRenderer extends Renderer{
 	}
 	public void setOrdersManager(OrdersManager ordersManager) {
 		this.ordersManager = ordersManager;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public void setEvaluator(Evaluator evaluator) {
+		this.evaluator = evaluator;
+		
 	}
 }

@@ -100,7 +100,9 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
     	Strategy strategy;
     	OrdersManager ordersManager;
 		public long delay;
+		String code;
     	public IndividualSimulation(String code, String datafile) {
+    		this.code=code;
     		backtest = new BackTest(datafile);
     		cursor = 500;
     		Parser parser = new Parser();
@@ -139,11 +141,12 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         			
         			BacktestingMainGUI.this.jProgressBar1.setValue(100*(currentIteration)/BacktestingMainGUI.this.iterations);
         			
-        			//update table
-        			updateTable(this.initPipeline.get(0).getPopulation());
-        			BacktestingMainGUI.this.jIndividualTable.repaint();
-        			BacktestingMainGUI.this.jScrollPaneTable.repaint();
+        			
         		}	
+    			//update table
+    			updateTable(this.initPipeline.get(0).getPopulation());
+    			BacktestingMainGUI.this.jIndividualTable.repaint();
+    			//BacktestingMainGUI.this.jScrollPaneTable.repaint();
     		}
     		SwingUtilities.invokeLater(()->{
 				this.run(its-1);
@@ -463,6 +466,7 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
         this.indSimulation = new IndividualSimulation(o.getString("code"),o.getString("datafile"));
         backtestRenderer = new BacktestRenderer(indSimulation.backtest.getData());
         backtestRenderer.setCursor(indSimulation.cursor);
+        backtestRenderer.setCode(indSimulation.code);
         backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(41)));
         backtestRenderer.setOrdersManager(indSimulation.ordersManager); 
         jScrollPaneBacktestingVisualization.setViewportView(backtestImg);
@@ -509,6 +513,8 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
 		this.indSimulation = new IndividualSimulation(code,"NVDA");
         backtestRenderer = new BacktestRenderer(indSimulation.backtest.getData());
         backtestRenderer.setCursor(indSimulation.cursor);
+        backtestRenderer.setCode(code);
+        backtestRenderer.setEvaluator(indSimulation.strategy.getEvaluator());
         backtestImg = new JLabel(new ImageIcon(backtestRenderer.init(41)));
         backtestRenderer.setOrdersManager(indSimulation.ordersManager); 
         jScrollPaneBacktestingVisualization.setViewportView(backtestImg);

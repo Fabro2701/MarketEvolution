@@ -9,8 +9,8 @@ public class Constants {
 	public static final String DEFAULT_MUTATION_PROBABILITY = "0.01f";
 	public static final String DEFAULT_CROSSOVER_PROBABILITY = "0.9f";
 	public static final String DEFAULT_SELECTION_SIZE = "30";
-	public static final String DEFAULT_FITNESS_VALUE = "-10000f";
-	public static final String DEFAULT_TOURNAMENT_SIZE = "5";
+	public static final String DEFAULT_FITNESS_VALUE = "-1000f";
+	public static final String DEFAULT_TOURNAMENT_SIZE = "3";
 
 	//properties name
 	public static final String POPULATION_SIZE = "population_size";

@@ -15,7 +15,8 @@ public class Evaluator {
 	
 	JSONObject _statement;
 	HashMap<String,String>_variables;//for simplicity all variables are global
-	
+	String lastResult;
+
 	/**
 	 * Reads a AST in JSON format
 	 * @param program
@@ -24,11 +25,12 @@ public class Evaluator {
 		_variables = new HashMap<String,String>();
 		
 		_statement = program.getJSONArray("body").getJSONObject(0);
-		
+		lastResult="";
 	}
 	
 	public OrderType getNext() {
 		String result = this._evaluate(_statement);
+		lastResult=result;
 		if(result==null)return OrderType.NOTHING;
 		try {
 			OrderType r = OrderType.valueOf(result);
@@ -37,10 +39,10 @@ public class Evaluator {
 		
 		//parse number format
 		Float f = Float.parseFloat(result);
-		if(f>=0.66f) {
+		if(f>=1f) {
 			return OrderType.BUY;
 		}
-		else if(f<0.66f && f>0.33f) {
+		else if(f<1f && f>-1f) {
 			return OrderType.NOTHING;
 		}
 		else {
@@ -62,7 +64,7 @@ public class Evaluator {
 		}
 		
 		if(type.contains("ReturnStatement")) {
-			int op = 1;
+			int op = 0;
 			if(op==0) {//numerical
 				return _evaluate(query.getJSONObject("result"));
 			}
@@ -255,6 +257,12 @@ public class Evaluator {
 		if(operator.equals("!")) {
 			return String.valueOf(!_BooleanValueOf(this._evaluate(argument)));
 		}
+		else if(operator.equals("-")) {
+			return String.valueOf(-Float.valueOf((this._evaluate(argument))));
+		}
+		else if(operator.equals("+")) {
+			return this._evaluate(argument);
+		}
 		return null;
 	}
 	/**
@@ -280,9 +288,12 @@ public class Evaluator {
 	public void addObservations(HashMap<String,String>obs) {
 		this._variables.putAll(obs);
 	}
+	public String getLastResult() {
+		return lastResult;
+	}
 	public static void main(String args[]) {
-		String test1 = "if(min(3,4,5)==max(min(3,8),10)){\n"
-					 + "	return 0.5+1;\n"
+		String test1 = "if(true){\n"
+					 + "	return +(1.5);\n"
 					 + "}"
 					 + "else{"
 					 + "return 0;"

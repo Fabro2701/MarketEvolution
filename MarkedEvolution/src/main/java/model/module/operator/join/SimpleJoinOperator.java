@@ -32,7 +32,7 @@ public class SimpleJoinOperator extends JoinOperator{
 			trimpopulation(generalPopulation,generalPopulation.size()+outsiders.size()-num);
 		}
 		//System.out.println("ideal num "+num);
-		//System.out.println("joining "+outsiders.size()+" to "+generalPopulation.size());
+		System.out.println("joining "+outsiders.size()+" to "+generalPopulation.size());
 //		System.out.println("___outsiders: ");
 //		for(Individual ind : outsiders) {
 //			System.out.println(ind.isValid()?ind:"nonvalid");

@@ -37,5 +37,8 @@ public class Strategy {
 	public void setEvaluator(Evaluator evaluator) {
 		this.evaluator = evaluator;
 	}
+	public Evaluator getEvaluator() {
+		return this.evaluator;
+	}
 
 }

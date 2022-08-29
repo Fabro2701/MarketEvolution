@@ -26,7 +26,7 @@ public class TournamentSelectionOperator extends SelectionOperator{
 
 
 	@Override
-	public void seletPopulation(Population population) {
+	public void selectPopulation(Population population) {
 		for(int i=0;i<selectionSize;i++) {
 			this.selectedPopulation.add(new Individual(getWinner(population)));
 		}

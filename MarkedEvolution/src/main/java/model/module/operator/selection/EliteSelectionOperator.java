@@ -24,7 +24,7 @@ public class EliteSelectionOperator extends SelectionOperator{
 	}
 
 	@Override
-	public void seletPopulation(Population population) {
+	public void selectPopulation(Population population) {
 		population.sort(Comparator.comparing(Individual::getFitness));
 		for(int i=0;i<selectionSize;i++) {
 			this.selectedPopulation.add(new Individual(population.get(population.size()-1-i)));

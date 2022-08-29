@@ -21,7 +21,7 @@ public abstract class SelectionOperator extends Operator{
 		
 	}
 	
-	public abstract void seletPopulation(Population population);
+	public abstract void selectPopulation(Population population);
 	public void setSelectedPopulation(Population selectedPopulation) {
 		this.selectedPopulation = selectedPopulation;
 	}
