@@ -1,0 +1,6 @@
+{
+"code":"if((0.6<low[3])&&(9>high[0])){return SELL;}else{return BUY;}",
+"datafile":"NVDA"
+}
+
+
