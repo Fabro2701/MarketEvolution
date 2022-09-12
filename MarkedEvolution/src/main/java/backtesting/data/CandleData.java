@@ -12,7 +12,7 @@ public class CandleData {
 	
 	public String toString() {
 		return open+" "+high+" "+low+" "+close;
-	} 
+	}  
 	public float getLow() {
 		return low;
 	}
