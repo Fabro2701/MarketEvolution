@@ -9,7 +9,7 @@ import backtesting.data.CandleData;
 import backtesting.data.DataSeries;
 import backtesting.order.Order;
 import backtesting.order.OrdersManager;
-import model.grammar.Evaluator;
+import backtesting.strategy.Evaluator;
 
 public class BacktestRenderer extends Renderer{
 	
@@ -86,7 +86,10 @@ public class BacktestRenderer extends Renderer{
 			g.drawString(code, 0, 10);
 		}
 		if(this.evaluator!=null) {
-			g.drawString(evaluator.getLastResult(), 0, 20);
+			String lr;
+			if((lr=evaluator.getLastResult())!=null) {
+				g.drawString(lr, 0, 20);
+			}
 		}
 	}
 	/**

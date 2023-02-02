@@ -1,12 +1,16 @@
-package model.module.operator.fitness;
+package backtesting;
 
 import java.util.Properties;
 import java.util.Random;
 
 import backtesting.BackTest;
 import backtesting.stats.BackTestStats;
+import backtesting.strategy.Evaluator;
+import backtesting.strategy.Strategy;
+import model.grammar.Parser;
 import model.individual.Individual;
 import model.individual.Population;
+import model.module.operator.fitness.FitnessEvaluationOperator;
 
 public class ProfitFitnessOperator extends FitnessEvaluationOperator{
 	BackTest backtest;
@@ -22,7 +26,12 @@ public class ProfitFitnessOperator extends FitnessEvaluationOperator{
 
 	@Override
 	public float evaluate(Individual ind) {
-		BackTestStats stats = backtest.runTest(ind.getPhenotype().getStrategy());
-		return stats.getProfit();
+		Parser parser = new Parser();
+		Evaluator evaluator = new Evaluator(parser.parse(ind.getPhenotype().getVisualCode()));
+		Strategy strategy = new Strategy();
+		strategy.setEvaluator(evaluator);
+		BackTestStats stats = backtest.runTest(strategy);
+		if(stats.getOrders()==0)return -5000f;
+		return stats.getProfit()-(float)stats.getOrders()*0.19f;
 	}
 }

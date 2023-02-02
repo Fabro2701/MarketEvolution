@@ -1,13 +1,13 @@
-package model.grammar;
+package backtesting.strategy;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import backtesting.order.Order.OrderType;
+import model.grammar.Parser;
+
 
 
 
@@ -30,7 +30,7 @@ public class Evaluator {
 	
 	public OrderType getNext() {
 		String result = this._evaluate(_statement);
-		lastResult=result;
+		if(result!=null)lastResult=result;
 		if(result==null)return OrderType.NOTHING;
 		try {
 			OrderType r = OrderType.valueOf(result);
@@ -64,7 +64,7 @@ public class Evaluator {
 		}
 		
 		if(type.contains("ReturnStatement")) {
-			int op = 0;
+			int op = 1;
 			if(op==0) {//numerical
 				return _evaluate(query.getJSONObject("result"));
 			}

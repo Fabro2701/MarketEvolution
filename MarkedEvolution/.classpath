@@ -6,7 +6,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jfreechart-1.5.2"/>
 	<classpathentry kind="lib" path="lib/json-20220320.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.5.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jfreechart-1.5.2"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GrammaticalEvolution"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

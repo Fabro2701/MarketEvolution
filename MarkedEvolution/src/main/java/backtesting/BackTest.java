@@ -95,7 +95,7 @@ public class BackTest {
 			setObservations(obs, data, i, ordersManager);
 			cd = data.get(i);
 			ordersManager.update(cd,i);
-			strategy.update(data,i,ordersManager, obs);
+			strategy.update(data, i, ordersManager, obs);
 			obs.clear();
 		}
 		ordersManager.close(cd);

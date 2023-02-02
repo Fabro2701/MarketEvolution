@@ -1,11 +1,11 @@
-<S> -> 'return (' <EXPR> ');'.
-<EXPR> -> <FBI> '(' <EXPR> ',' <EXPR> ')' | '('<EXPR> <AR> <EXPR>')' | <OBS> | <NUMBER>.
-<FBI> -> 'max'|'min'.
+<S> -> return ( <EXPR> ) ;.
+<EXPR> -> <FBI> ( <EXPR> , <EXPR> ) | (<EXPR> <AR> <EXPR>) | <OBS> | <NUMBER>.
+<FBI> -> max|min.
 <NUMBER> -> <INTCONST> | <REALCONST>.
-<OBS> -> 'ma'<MA>'['<DAY>']'|<PRICE>'['<DAY>']'.
-<PRICE> -> 'open'|'high'|'low'|'close'.
-<MA> -> '25'|'50'|'200'.
-<DAY> -> '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'.
-<AR> -> '+'|'*'|'-'.
-<INTCONST> -> '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'.
-<REALCONST> -> '0.'<INTCONST>.
+<OBS> -> ma <MA> [ <DAY> ]|<PRICE> [ <DAY> ].
+<PRICE> -> open|high|low|close.
+<MA> -> 25|50|200.
+<DAY> -> 0|1|2|3|4|5|6|7|8|9.
+<AR> -> +|*|-.
+<INTCONST> -> 0|1|2|3|4|5|6|7|8|9.
+<REALCONST> -> 0. <INTCONST>.

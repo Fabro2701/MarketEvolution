@@ -8,7 +8,7 @@ import backtesting.order.FixedTimeOrder;
 import backtesting.order.Order;
 import backtesting.order.Order.OrderType;
 import backtesting.order.OrdersManager;
-import model.grammar.Evaluator;
+
 
 public class Strategy {
 	Evaluator evaluator;

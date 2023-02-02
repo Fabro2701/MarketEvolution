@@ -1,14 +1,14 @@
 <S> -> <IF>.
-<IF> -> 'if' <COND> '{' <TRADE> '}' 'else' '{' <TRADE> '}' | 'if' <COND> '{' <TRADE> '}'.
-<COND> -> '('<VALUE> <OP> <OBS> ')'| '('<COND><LOGOP><COND>')'.
+<IF> -> if <COND> { <TRADE> } else { <TRADE> } | if <COND> { <TRADE> }.
+<COND> -> ( <VALUE> <OP> <OBS> )| ( <COND><LOGOP><COND> ).
 <VALUE> -> <N> | <REALCONST>.
-<OBS> -> 'ma'<MA>'['<DAY>']'|<PRICE>'['<DAY>']'.
-<PRICE> -> 'open'|'high'|'low'|'close'.
-<MA> -> '25'|'50'|'200'.
-<DAY> -> '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'.
+<OBS> -> ma <MA> [ <DAY> ] | <PRICE> [ <DAY> ].
+<PRICE> -> open|high|low|close.
+<MA> -> 25|50|200.
+<DAY> -> 0|1|2|3|4|5|6|7|8|9.
 <OP> -> '<'|'>'|'<='|'>='.
-<AR> -> '+'|'*'|'-'.
-<N> -> '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'.
+<AR> -> +|*|-.
+<N> -> 0|1|2|3|4|5|6|7|8|9.
 <REALCONST> -> '0.'<N>.
-<LOGOP> -> '||' | '&&'.
+<LOGOP> -> '||' | &&.
 <TRADE> -> 'return BUY;'|'return SELL;'|'return NOTHING;'.

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
+import backtesting.ProfitFitnessOperator;
 import model.Experiment;
 import model.algorithm.AbstractPipeline;
 import model.algorithm.AbstractSearchAlgorithm;
@@ -27,7 +28,6 @@ import model.module.operator.collector.SimilarityCollectorOperator;
 import model.module.operator.crossover.CrossoverOperator;
 import model.module.operator.crossover.OnePointCrossoverOperator;
 import model.module.operator.fitness.FitnessEvaluationOperator;
-import model.module.operator.fitness.ProfitFitnessOperator;
 import model.module.operator.initialization.InitializationOperator;
 import model.module.operator.initialization.RandomInitializerOperator;
 import model.module.operator.join.JoinOperator;
@@ -49,7 +49,8 @@ public class Test extends Experiment{
 		AbstractPipeline initPipeline = new SimplePipeline();
 		
 		AbstractGrammar grammar = this.loadGrammar(properties);
-		
+		System.out.println(grammar);
+	
 		InitializationModule initModule = new InitializationModule(generalPopulation, properties,rnd);
 		InitializationOperator rinitOp = this.loadInitializer(properties, grammar);
 		initModule.addOperator(rinitOp);
@@ -117,7 +118,8 @@ public class Test extends Experiment{
 	}
 	public static void main2(String args[]) {
 		AbstractGrammar grammar = new StandardGrammar();
-		grammar.parseBNF("default2");
+		grammar.parseBNF("default");
+		System.out.println(grammar.toString());
 		Properties properties = new Properties();
 		try { 
 			properties.load(new FileInputStream(new File("resources/properties/default.properties")));

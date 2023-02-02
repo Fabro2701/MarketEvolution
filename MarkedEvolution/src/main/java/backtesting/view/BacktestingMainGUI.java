@@ -23,12 +23,12 @@ import org.json.JSONTokener;
 
 import backtesting.BackTest;
 import backtesting.order.OrdersManager;
+import backtesting.strategy.Evaluator;
 import backtesting.strategy.Strategy;
 import main.Test;
 import model.Constants;
 import model.Experiment;
 import model.algorithm.BasicSearchAlgorithm;
-import model.grammar.Evaluator;
 import model.grammar.Parser;
 import model.individual.Individual;
 import model.individual.Population;
@@ -483,14 +483,14 @@ public class BacktestingMainGUI extends javax.swing.JFrame {
 		    	this.jScrollPaneBacktestingVisualization.repaint();
 				indSimulation.cursor++;
 				this.jSlider1.setValue(100*indSimulation.cursor/indSimulation.backtest.getData().size());
-				
+				try {
+					TimeUnit.MILLISECONDS.sleep(indSimulation.delay);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    	SwingUtilities.invokeLater(()->{
-		    		try {
-						TimeUnit.MILLISECONDS.sleep(indSimulation.delay);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		    		
 		    		
 		    		runIndSimulation();
 		    		
